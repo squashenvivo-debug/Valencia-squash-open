@@ -196,8 +196,8 @@
 }
 /* Más altura total para que los 16 partidos de primera ronda respiren */
 .bracket > .round {
-  height: 1660px !important;
-  min-height: 1660px !important;
+  height: 2660px !important;
+  min-height: 2660px !important;
 }
 </style>
 
@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!bracket) return;
     const rounds = Array.from(bracket.querySelectorAll(":scope > .round"));
     const TOP = 64;
-    const HEIGHT = 1560;
+    const HEIGHT = 2560;
     const TOTAL = TOP + HEIGHT + 24;
 
     rounds.forEach(round => {
@@ -254,8 +254,8 @@ document.addEventListener("DOMContentLoaded", function () {
   white-space: normal !important;
 }
 .bracket > .round {
-  height: 2060px !important;
-  min-height: 2060px !important;
+  height: 3060px !important;
+  min-height: 3060px !important;
 }
 </style>
 
