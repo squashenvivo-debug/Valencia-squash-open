@@ -1,1 +1,9 @@
-Sube los 3 archivos a la raíz de GitHub: index.html, admin.html y noticia.html. Sustituye los existentes. No hace falta cambiar Supabase.
+SUBE LOS 3 ARCHIVOS A LA RAÍZ DE GITHUB:
+- index.html
+- admin.html
+- noticia.html
+
+El panel Admin permite guardar ES, VA, EN y FR.
+Español es obligatorio. Si VA/EN/FR están vacíos, la web mostrará español como alternativa.
+Al cambiar ES/VA/EN/FR en la web, las tarjetas de noticias cambian de idioma.
+Al abrir Leer más, la noticia completa se abre en el mismo idioma.

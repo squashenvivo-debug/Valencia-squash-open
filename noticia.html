@@ -9,5 +9,11 @@ const client=supabase.createClient("https://texjzaanugmssmolzwgb.supabase.co","e
 const esc=v=>String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 (async()=>{const id=new URLSearchParams(location.search).get('id');if(!id){article.textContent='Noticia no encontrada.';return}
 const {data,error}=await client.from('news').select('*').eq('id',id).single();if(error||!data){article.textContent='Noticia no encontrada.';return}
-document.title=data.title+' · PSA Valencia 2026';article.innerHTML=`<div class="date">${new Date(data.news_date+'T12:00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'})}</div><h1>${esc(data.title)}</h1>${data.image_url?`<img class="heroimg" src="${data.image_url}" alt="">`:''}<div class="text">${esc(data.description)}</div><a class="back" href="index.html#news">VOLVER A NOTICIAS</a>`;})();
+const lang=(new URLSearchParams(location.search).get('lang')||localStorage.getItem('psav_lang')||'es').toLowerCase().slice(0,2);
+const title=data['title_'+lang]||data.title_es||data.title||'';
+const description=data['description_'+lang]||data.description_es||data.description||'';
+const back=lang==='va'?'TORNAR A NOTÍCIES':lang==='en'?'BACK TO NEWS':lang==='fr'?'RETOUR AUX ACTUALITÉS':'VOLVER A NOTICIAS';
+document.documentElement.lang=lang;
+document.title=title+' · PSA Valencia 2026';
+article.innerHTML=`<div class="date">${new Date(data.news_date+'T12:00:00').toLocaleDateString(lang,{day:'2-digit',month:'long',year:'numeric'})}</div><h1>${esc(title)}</h1>${data.image_url?`<img class="heroimg" src="${data.image_url}" alt="">`:''}<div class="text">${esc(description)}</div><a class="back" href="index.html#news">${back}</a>`;})();
 </script></body></html>

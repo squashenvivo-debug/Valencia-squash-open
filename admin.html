@@ -30,10 +30,24 @@ button:disabled{opacity:.5}.hidden{display:none!important}.msg{margin-top:15px;p
 <h2>Publicar noticia</h2>
 <div id="who"></div>
 <input id="editId" type="hidden"><input id="oldImage" type="hidden">
-<label>Título</label><input id="title">
 <label>Fecha</label><input id="newsDate" type="date">
 <label>Imagen</label><input id="image" type="file" accept="image/*">
-<label>Descripción / noticia</label><textarea id="description"></textarea>
+
+<h3>ESPAÑOL · obligatorio</h3>
+<label>Título ES</label><input id="title_es">
+<label>Noticia ES</label><textarea id="description_es"></textarea>
+
+<h3>VALENCIÀ</h3>
+<label>Títol VA</label><input id="title_va">
+<label>Notícia VA</label><textarea id="description_va"></textarea>
+
+<h3>ENGLISH</h3>
+<label>Title EN</label><input id="title_en">
+<label>News EN</label><textarea id="description_en"></textarea>
+
+<h3>FRANÇAIS</h3>
+<label>Titre FR</label><input id="title_fr">
+<label>Actualité FR</label><textarea id="description_fr"></textarea>
 <button id="publish" type="button">PUBLICAR NOTICIA</button>
 <button id="cancelEdit" type="button" class="hidden">CANCELAR EDICIÓN</button>
 <button id="logout" type="button">CERRAR SESIÓN</button>
@@ -81,8 +95,11 @@ button:disabled{opacity:.5}.hidden{display:none!important}.msg{margin-top:15px;p
   el('logout').addEventListener('click',async()=>{await client.auth.signOut();await showSession();});
 
   el('publish').addEventListener('click',async function(){
-    const title=el('title').value.trim(), description=el('description').value.trim(), news_date=el('newsDate').value, file=el('image').files[0];
-    if(!title||!description||!news_date){msg('pubMsg','Completa título, fecha y descripción.','error');return;}
+    const title_es=el('title_es').value.trim(), description_es=el('description_es').value.trim(), news_date=el('newsDate').value, file=el('image').files[0];
+    const title_va=el('title_va').value.trim(), description_va=el('description_va').value.trim();
+    const title_en=el('title_en').value.trim(), description_en=el('description_en').value.trim();
+    const title_fr=el('title_fr').value.trim(), description_fr=el('description_fr').value.trim();
+    if(!title_es||!description_es||!news_date){msg('pubMsg','Completa título, fecha y noticia en español.','error');return;}
     this.disabled=true;msg('pubMsg','Publicando...');
     try{
       let image_url=el('oldImage').value||null;
@@ -95,8 +112,14 @@ button:disabled{opacity:.5}.hidden{display:none!important}.msg{margin-top:15px;p
       }
       const editId=el('editId').value;
       const save=editId
-        ? await client.from('news').update({title,description,news_date,image_url,updated_at:new Date().toISOString()}).eq('id',editId)
-        : await client.from('news').insert({title,description,news_date,image_url});
+        ? await client.from('news').update({
+            title:title_es,description:description_es,news_date,image_url,updated_at:new Date().toISOString(),
+            title_es,description_es,title_va,description_va,title_en,description_en,title_fr,description_fr
+          }).eq('id',editId)
+        : await client.from('news').insert({
+            title:title_es,description:description_es,news_date,image_url,
+            title_es,description_es,title_va,description_va,title_en,description_en,title_fr,description_fr
+          });
       if(save.error)throw save.error;
       msg('pubMsg',editId?'Noticia actualizada correctamente.':'Noticia publicada correctamente. Ya debe aparecer en la web.','ok');
       resetForm(); await loadNewsList();
@@ -106,7 +129,9 @@ button:disabled{opacity:.5}.hidden{display:none!important}.msg{margin-top:15px;p
 
   function esc(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
   function resetForm(){
-    el('editId').value='';el('oldImage').value='';el('title').value='';el('description').value='';el('image').value='';
+    el('editId').value='';el('oldImage').value='';
+    ['title_es','description_es','title_va','description_va','title_en','description_en','title_fr','description_fr'].forEach(id=>el(id).value='');
+    el('image').value='';
     el('newsDate').value=new Date().toISOString().slice(0,10);el('publish').textContent='PUBLICAR NOTICIA';el('cancelEdit').classList.add('hidden');
   }
   el('cancelEdit').addEventListener('click',resetForm);
@@ -114,12 +139,16 @@ button:disabled{opacity:.5}.hidden{display:none!important}.msg{margin-top:15px;p
     const res=await client.from('news').select('*').order('news_date',{ascending:false}).order('created_at',{ascending:false});
     if(res.error){el('newsList').textContent='Error: '+res.error.message;return;}
     if(!res.data||!res.data.length){el('newsList').textContent='No hay noticias publicadas.';return;}
-    el('newsList').innerHTML=res.data.map(n=>`<div style="padding:16px 0;border-top:1px solid #31536a"><b>${esc(n.title)}</b><br><small>${n.news_date}</small><br><button type="button" onclick="editNews(${n.id})">EDITAR</button><button type="button" onclick="deleteNews(${n.id})" style="background:#b73535;color:white;margin-left:8px">ELIMINAR</button></div>`).join('');
+    el('newsList').innerHTML=res.data.map(n=>`<div style="padding:16px 0;border-top:1px solid #31536a"><b>${esc(n.title_es||n.title)}</b><br><small>${n.news_date}</small><br><button type="button" onclick="editNews(${n.id})">EDITAR</button><button type="button" onclick="deleteNews(${n.id})" style="background:#b73535;color:white;margin-left:8px">ELIMINAR</button></div>`).join('');
     window.__news=res.data;
   }
   window.editNews=function(id){
     const n=(window.__news||[]).find(x=>String(x.id)===String(id));if(!n)return;
-    el('editId').value=n.id;el('oldImage').value=n.image_url||'';el('title').value=n.title;el('newsDate').value=n.news_date;el('description').value=n.description;
+    el('editId').value=n.id;el('oldImage').value=n.image_url||'';el('newsDate').value=n.news_date;
+    el('title_es').value=n.title_es||n.title||'';el('description_es').value=n.description_es||n.description||'';
+    el('title_va').value=n.title_va||'';el('description_va').value=n.description_va||'';
+    el('title_en').value=n.title_en||'';el('description_en').value=n.description_en||'';
+    el('title_fr').value=n.title_fr||'';el('description_fr').value=n.description_fr||'';
     el('publish').textContent='GUARDAR CAMBIOS';el('cancelEdit').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});
   };
   window.deleteNews=async function(id){
