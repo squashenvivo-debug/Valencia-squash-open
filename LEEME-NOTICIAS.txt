@@ -1,0 +1,15 @@
+PSA Valencia 2026 - Noticias
+==============================
+Sube index.html y admin.html a la raíz del repositorio.
+
+Web pública:
+- index.html carga automáticamente las noticias desde Supabase.
+
+Panel privado:
+- abre /admin.html
+- inicia sesión con el EMAIL y contraseña de Pere o Laura.
+- permite publicar, editar y eliminar noticias y subir imágenes.
+
+IMPORTANTE:
+- La contraseña NO está guardada en estos archivos.
+- La clave incluida es la clave pública anon de Supabase.
