@@ -170,6 +170,71 @@
 }
 </style>
 
+
+<style id="bracket-uniform-card-size-fix">
+/* Todas las tarjetas tienen exactamente el mismo tamaño */
+.bracket > .round > .match {
+  width: 192px !important;
+  height: 84px !important;
+  min-height: 84px !important;
+  max-height: 84px !important;
+  padding: 10px 14px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  justify-content: center !important;
+}
+/* El texto no modifica la altura de la tarjeta */
+.bracket .three-line-match .player,
+.bracket .three-line-match .vs {
+  line-height: 1.15 !important;
+}
+/* BYE también conserva exactamente la misma altura */
+.bracket > .round > .match:not(.three-line-match) {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+/* Más altura total para que los 16 partidos de primera ronda respiren */
+.bracket > .round {
+  height: 1660px !important;
+  min-height: 1660px !important;
+}
+</style>
+
+<script id="bracket-uniform-symmetric-positioning-js">
+document.addEventListener("DOMContentLoaded", function () {
+  function uniformBracketLayout() {
+    const bracket = document.querySelector(".bracket");
+    if (!bracket) return;
+    const rounds = Array.from(bracket.querySelectorAll(":scope > .round"));
+    const TOP = 64;
+    const HEIGHT = 1560;
+    const TOTAL = TOP + HEIGHT + 24;
+
+    rounds.forEach(round => {
+      round.style.height = TOTAL + "px";
+      round.style.minHeight = TOTAL + "px";
+      const matches = Array.from(round.querySelectorAll(":scope > .match"));
+      const n = matches.length;
+      matches.forEach((match, i) => {
+        const centerY = TOP + HEIGHT * ((i + 0.5) / n);
+        match.style.position = "absolute";
+        match.style.height = "84px";
+        match.style.minHeight = "84px";
+        match.style.maxHeight = "84px";
+        match.style.top = (centerY - 42) + "px";
+      });
+    });
+  }
+  function run(){requestAnimationFrame(()=>requestAnimationFrame(uniformBracketLayout));}
+  run();
+  window.addEventListener("load",run);
+  window.addEventListener("resize",run);
+  setTimeout(run,250);
+  setTimeout(run,700);
+});
+</script>
+
 </head><body>
 <header><nav>
 <a href="#inicio" data-i18n="navHome">Inicio</a><a href="#torneo" data-i18n="navTournament">Torneo</a><a href="#programa" data-i18n="navSchedule">Programa</a><a href="#jugadores" data-i18n="navPlayers">Jugadores</a><a href="#cuadro" data-i18n="navDraw">Cuadro</a><a href="#directo" data-i18n="navLive">En directo</a><a href="#sponsors" data-i18n="navSponsors">Sponsors</a>
