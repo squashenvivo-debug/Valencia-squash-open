@@ -3,16 +3,7 @@
 <a href="#inicio" data-i18n="navHome">Inicio</a><a href="#torneo" data-i18n="navTournament">Torneo</a><a href="#programa" data-i18n="navSchedule">Programa</a><a href="#jugadores" data-i18n="navPlayers">Jugadores</a><a href="#cuadro" data-i18n="navDraw">Cuadro</a><a href="#directo" data-i18n="navLive">En directo</a><a href="#sponsors" data-i18n="navSponsors">Sponsors</a>
 <div class="languages"><button onclick="setLang('es')">ES</button><button onclick="setLang('va')">VAL</button><button onclick="setLang('en')">EN</button><button onclick="setLang('fr')">FR</button></div>
 </nav></header>
-<section id="inicio" class="hero">
-<img src="assets/images/banner-valencia-2026.jpg" alt="PSA Valencia 2026 Memorial Chimo Marmaneu">
-<div class="hero-overlay">
-  <div class="hero-kicker">11 — 15 AGOSTO 2026 · OLYMPIA ALBORAYA · VALENCIA</div>
-  <h1 class="hero-title"></b><br></b><br></b><br></h1>
-  <div class="hero-subtitle"></div>
-  <div id="count" class="countdown"></div>
-  <a class="hero-cta" href="#torneo" data-hero-i18n="discover">DESCUBRE EL TORNEO</a>
-</div>
-</section>
+<section id="inicio" class="hero"><img src="assets/images/banner-valencia-2026.jpg" alt="PSA Valencia 2026 Memorial Chimo Marmaneu"></section>
 <main><section id="torneo"><h1>PSA Valencia 2026 – Memorial Chimo Marmaneu</h1><div class="info"><div><b data-i18n="dates">Fechas</b><span>11–15 agosto 2026</span></div><div><b data-i18n="venue">Sede</b><span>Olympia Alboraya · Valencia</span></div><div><b data-i18n="tour">Circuito</b><span>PSA Squash Tour</span></div><div><b data-i18n="category">Categoría</b><span>Copper · $36,000</span></div></div></section>
 <section id="programa"><h2 data-i18n="scheduleTitle">Programa y horarios</h2><p data-i18n="scheduleText">Los horarios se mostrarán junto a cada partido del cuadro cuando estén confirmados.</p></section>
 <section id="jugadores"><h2 data-i18n="playersTitle">Jugadores</h2><div class="players"><article class="player"><div class="num">01</div><div class="photo"><img src="assets/images/player-01.png" onerror="this.onerror=null;this.src='assets/images/player-placeholder.svg'" alt=""></div><div class="pname">Muhammad Ashab Irfan (1)</div><div class="flag" title="Pakistan"><img src="assets/images/flags/PAK.png" alt="Pakistan"></div></article>
@@ -70,20 +61,6 @@ va:{navHome:"Inici",navTournament:"Torneig",navSchedule:"Programa",navPlayers:"J
 en:{navHome:"Home",navTournament:"Tournament",navSchedule:"Schedule",navPlayers:"Players",navDraw:"Draw",navLive:"Live",navSponsors:"Sponsors",dates:"Dates",venue:"Venue",tour:"Tour",category:"Category",scheduleTitle:"Schedule and match times",scheduleText:"Match times will be displayed alongside each match in the draw once officially confirmed.",playersTitle:"Players",drawTitle:"Tournament draw",drawHint:"← Swipe horizontally to view all rounds →",round1:"First round",round2:"Second round",quarters:"Quarter-finals",semis:"Semi-finals",final:"Final",liveTitle:"Live",liveText:"Live streams and live tournament results.",sponsorsTitle:"Sponsors and partners"},
 fr:{navHome:"Accueil",navTournament:"Tournoi",navSchedule:"Programme",navPlayers:"Joueurs",navDraw:"Tableau",navLive:"En direct",navSponsors:"Sponsors",dates:"Dates",venue:"Lieu",tour:"Circuit",category:"Catégorie",scheduleTitle:"Programme et horaires",scheduleText:"Les horaires seront affichés à côté de chaque match du tableau dès leur confirmation officielle.",playersTitle:"Joueurs",drawTitle:"Tableau du tournoi",drawHint:"← Faites défiler horizontalement pour voir tous les tours →",round1:"Premier tour",round2:"Deuxième tour",quarters:"Quarts de finale",semis:"Demi-finales",final:"Finale",liveTitle:"En direct",liveText:"Diffusions et résultats du tournoi en direct.",sponsorsTitle:"Sponsors et partenaires"}
 };
-function setLang(lang){document.documentElement.lang=lang;localStorage.setItem("vsoLang",lang);const hd={es:"DESCUBRE EL TORNEO",va:"DESCOBRIX EL TORNEIG",en:"DISCOVER THE TOURNAMENT",fr:"DÉCOUVRIR LE TOURNOI"};document.querySelectorAll("[data-hero-i18n]").forEach(el=>el.textContent=hd[lang]||hd.es);document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.dataset.i18n;if(I18N[lang]&&I18N[lang][k])el.textContent=I18N[lang][k]});document.querySelectorAll(".languages button").forEach(b=>b.classList.toggle("active",b.textContent.toLowerCase()===(lang==="va"?"val":lang)))}
+function setLang(lang){document.documentElement.lang=lang;localStorage.setItem("vsoLang",lang);document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.dataset.i18n;if(I18N[lang]&&I18N[lang][k])el.textContent=I18N[lang][k]});document.querySelectorAll(".languages button").forEach(b=>b.classList.toggle("active",b.textContent.toLowerCase()===(lang==="va"?"val":lang)))}
 document.addEventListener("DOMContentLoaded",()=>setLang(localStorage.getItem("vsoLang")||"es"));
-</script><script>
-const target=new Date('2026-08-11T09:00:00+02:00');
-function tick(){
-  const e=document.getElementById('count');
-  if(!e) return;
-  const d=target-new Date();
-  if(d<=0){e.textContent='EL TORNEO HA COMENZADO';return;}
-  const days=Math.floor(d/86400000);
-  const h=Math.floor(d/3600000)%24;
-  const m=Math.floor(d/60000)%60;
-  const s=Math.floor(d/1000)%60;
-  e.textContent=days+' DÍAS · '+h+' H · '+m+' MIN · '+s+' S';
-}
-tick();setInterval(tick,1000);
 </script></body></html>
