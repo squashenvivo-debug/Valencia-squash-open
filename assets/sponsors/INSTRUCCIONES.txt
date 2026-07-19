@@ -1,0 +1,5 @@
+Sube aquí hasta 15 logos PNG con estos nombres:
+sponsor01.png, sponsor02.png, ... sponsor15.png
+
+Solo aparecerán en la web los archivos que existan.
+Para cambiar un patrocinador, sustituye su PNG manteniendo el mismo nombre.
