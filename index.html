@@ -46,37 +46,60 @@
 </style>
 
 
-<style id="three-line-match-fix">
+
+
+
+<style id="compact-three-line-match-fix">
 .match.three-line-match,
 .match-card.three-line-match,
 .bracket-match.three-line-match {
-  display: grid !important;
-  grid-template-rows: auto auto auto !important;
-  align-content: center !important;
-  justify-items: stretch !important;
-  gap: 4px !important;
-  min-height: 92px !important;
-  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  gap: 2px !important;
+  min-height: 0 !important;
+  height: auto !important;
   padding: 10px 14px !important;
+  box-sizing: border-box !important;
 }
-.three-line-match .player {
-  display: block !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  white-space: normal !important;
-  overflow-wrap: break-word !important;
-  line-height: 1.15 !important;
-  margin: 0 !important;
-}
+
+.three-line-match .player,
 .three-line-match .vs {
+  position: static !important;
   display: block !important;
-  width: 100% !important;
-  text-align: center !important;
-  font-weight: 700 !important;
-  line-height: 1.1 !important;
-  margin: 2px 0 !important;
-  border: 0 !important;
+  width: auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
   padding: 0 !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  line-height: 1.2 !important;
+}
+
+.three-line-match .player {
+  text-align: left !important;
+  white-space: normal !important;
+}
+
+.three-line-match .vs {
+  align-self: flex-start !important;
+  text-align: left !important;
+  font-weight: 700 !important;
+  margin: 1px 0 !important;
+}
+
+/* Evita pseudo-elementos/separadores internos heredados */
+.three-line-match .player::before,
+.three-line-match .player::after,
+.three-line-match .vs::before,
+.three-line-match .vs::after {
+  display: none !important;
+  content: none !important;
 }
 </style>
 
@@ -89,11 +112,10 @@
 <img src="assets/images/banner-valencia-2026.jpg" alt="PSA Valencia 2026 Memorial Chimo Marmaneu">
 <div class="hero-overlay">
   <div class="hero-kicker">11 — 15 AGOSTO 2026 · OLYMPIA ALBORAYA · VALENCIA</div>
-  <h1 class="hero-title"><br><br></h1>
-  <div class="hero-subtitle"></div>
+  <h1 class="hero-title">PSA<br>VALENCIA<br>2026</h1>
+  <div class="hero-subtitle">Memorial Chimo Marmaneu</div>
   <div id="count" class="countdown"></div>
   <a class="hero-cta" href="#torneo" data-hero-i18n="discover">DESCUBRE EL TORNEO</a>
-  <h1 class="hero-title"><br><br>2026</h1>
 </div>
 </section>
 <main><section id="torneo"><h1>PSA Valencia 2026 – Memorial Chimo Marmaneu</h1><div class="info"><div><b data-i18n="dates">Fechas</b><span>11–15 agosto 2026</span></div><div><b data-i18n="venue">Sede</b><span>Olympia Alboraya · Valencia</span></div><div><b data-i18n="tour">Circuito</b><span>PSA Squash Tour</span></div><div><b data-i18n="category">Categoría</b><span>Copper · $36,000</span></div></div></section>
