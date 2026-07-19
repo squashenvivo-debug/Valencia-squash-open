@@ -348,6 +348,80 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+
+<style id="bracket-gap-v5">
+/* Separación visible de ~1 cm entre partidos de la primera ronda */
+.bracket > .round:first-child > .match {
+  height: 100px !important;
+  min-height: 100px !important;
+  max-height: 100px !important;
+  box-sizing: border-box !important;
+}
+</style>
+<script id="bracket-gap-positioning-v5">
+(function(){
+  function layoutBracketV5(){
+    const bracket = document.querySelector(".bracket");
+    if(!bracket) return;
+    const rounds = Array.from(bracket.querySelectorAll(":scope > .round"));
+    if(!rounds.length) return;
+
+    const TOP = 70;
+    const CARD = 100;
+    const GAP = 38; // aproximadamente 1 cm en pantalla
+    const first = Array.from(rounds[0].querySelectorAll(":scope > .match"));
+    if(!first.length) return;
+
+    const usable = first.length * CARD + Math.max(0, first.length - 1) * GAP;
+    const total = TOP + usable + 50;
+
+    rounds.forEach((round, r)=>{
+      round.style.position = "relative";
+      round.style.height = total + "px";
+      round.style.minHeight = total + "px";
+
+      const matches = Array.from(round.querySelectorAll(":scope > .match"));
+      const n = matches.length;
+      matches.forEach((m,i)=>{
+        m.style.position = "absolute";
+        m.style.boxSizing = "border-box";
+        m.style.height = CARD + "px";
+        m.style.minHeight = CARD + "px";
+        m.style.maxHeight = CARD + "px";
+
+        let center;
+        if(r===0){
+          center = TOP + CARD/2 + i*(CARD+GAP);
+        } else {
+          center = TOP + usable*((i+0.5)/n);
+        }
+        m.style.top = (center-CARD/2) + "px";
+      });
+    });
+  }
+
+  function run(){
+    requestAnimationFrame(()=>requestAnimationFrame(layoutBracketV5));
+  }
+  document.addEventListener("DOMContentLoaded",run);
+  window.addEventListener("load",run);
+  window.addEventListener("resize",run);
+  setTimeout(run,300);
+  setTimeout(run,1000);
+})();
+</script>
+
+
+<style id="bracket-vertical-gap-v6">
+/* Separación VERTICAL de aproximadamente 1 cm entre partidos de primera ronda */
+.bracket > .round:first-child > .match {
+    margin-bottom: 38px !important;
+}
+.bracket > .round:first-child > .match:last-child {
+    margin-bottom: 0 !important;
+}
+</style>
+
 </head><body>
 <header><nav>
 <a href="#inicio" data-i18n="navHome">Inicio</a><a href="#torneo" data-i18n="navTournament">Torneo</a><a href="#programa" data-i18n="navSchedule">Programa</a><a href="#jugadores" data-i18n="navPlayers">Jugadores</a><a href="#cuadro" data-i18n="navDraw">Cuadro</a><a href="#directo" data-i18n="navLive">En directo</a><a href="#sponsors" data-i18n="navSponsors">Sponsors</a>
