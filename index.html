@@ -235,6 +235,67 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+
+<style id="bracket-spacing-and-text-v3">
+/* Más espacio vertical y tarjetas suficientemente altas para nombres largos */
+.bracket > .round > .match {
+  width: 200px !important;
+  height: 96px !important;
+  min-height: 96px !important;
+  max-height: 96px !important;
+  padding: 10px 14px !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+.bracket .three-line-match .player,
+.bracket .three-line-match .vs {
+  line-height: 1.15 !important;
+  overflow: visible !important;
+  white-space: normal !important;
+}
+.bracket > .round {
+  height: 2060px !important;
+  min-height: 2060px !important;
+}
+</style>
+
+<script id="bracket-spacing-positioning-v3">
+document.addEventListener("DOMContentLoaded", function () {
+  function layoutV3() {
+    const bracket = document.querySelector(".bracket");
+    if (!bracket) return;
+    const rounds = Array.from(bracket.querySelectorAll(":scope > .round"));
+    const TOP = 64;
+    const HEIGHT = 1940;
+    const CARD_H = 96;
+    const TOTAL = TOP + HEIGHT + 32;
+
+    rounds.forEach(round => {
+      round.style.height = TOTAL + "px";
+      round.style.minHeight = TOTAL + "px";
+      const matches = Array.from(round.querySelectorAll(":scope > .match"));
+      const n = matches.length;
+      matches.forEach((match, i) => {
+        const centerY = TOP + HEIGHT * ((i + 0.5) / n);
+        match.style.position = "absolute";
+        match.style.width = "200px";
+        match.style.height = CARD_H + "px";
+        match.style.minHeight = CARD_H + "px";
+        match.style.maxHeight = CARD_H + "px";
+        match.style.top = (centerY - CARD_H / 2) + "px";
+        match.style.overflow = "visible";
+      });
+    });
+  }
+  function run(){requestAnimationFrame(()=>requestAnimationFrame(layoutV3));}
+  run();
+  window.addEventListener("load",run);
+  window.addEventListener("resize",run);
+  setTimeout(run,250);
+  setTimeout(run,700);
+});
+</script>
+
 </head><body>
 <header><nav>
 <a href="#inicio" data-i18n="navHome">Inicio</a><a href="#torneo" data-i18n="navTournament">Torneo</a><a href="#programa" data-i18n="navSchedule">Programa</a><a href="#jugadores" data-i18n="navPlayers">Jugadores</a><a href="#cuadro" data-i18n="navDraw">Cuadro</a><a href="#directo" data-i18n="navLive">En directo</a><a href="#sponsors" data-i18n="navSponsors">Sponsors</a>
