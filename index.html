@@ -295,104 +295,71 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 
-<script id="equal-round-column-heights-js">
+<style id="bracket-fixed-symmetric-layout">
+/* Cuadro simétrico: cada ronda ocupa exactamente la misma altura útil */
+.bracket {
+  align-items: stretch !important;
+}
+.bracket > .round {
+  position: relative !important;
+  height: 1320px !important;
+  min-height: 1320px !important;
+  padding-top: 64px !important;
+  box-sizing: border-box !important;
+}
+.bracket > .round > h3 {
+  position: absolute !important;
+  top: 18px !important;
+  left: 12px !important;
+  margin: 0 !important;
+}
+/* Las tarjetas se posicionan por su centro vertical mediante JS */
+.bracket > .round > .match {
+  position: absolute !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+</style>
+
+<script id="bracket-symmetric-positioning-js">
 document.addEventListener("DOMContentLoaded", function () {
-  function equalizeDrawColumns() {
-    const bracket =
-      document.querySelector(".bracket") ||
-      document.querySelector(".draw-bracket") ||
-      document.querySelector(".tournament-bracket");
+  function layoutBracketSymmetric() {
+    const bracket = document.querySelector(".bracket");
     if (!bracket) return;
 
-    let rounds = Array.from(bracket.querySelectorAll(":scope > .bracket-column, :scope > .round, :scope > .draw-round"));
-    if (!rounds.length) rounds = Array.from(bracket.children);
+    const rounds = Array.from(bracket.querySelectorAll(":scope > .round"));
     if (!rounds.length) return;
 
-    rounds.forEach(r => r.style.minHeight = "");
-    const maxHeight = Math.max(...rounds.map(r => r.scrollHeight));
-    rounds.forEach(r => {
-      r.style.minHeight = maxHeight + "px";
-      r.style.height = maxHeight + "px";
-    });
-  }
+    const TOP = 64;       // zona reservada para títulos
+    const HEIGHT = 1240;  // altura útil común de todas las rondas
+    const TOTAL = TOP + HEIGHT + 16;
 
-  equalizeDrawColumns();
-  window.addEventListener("load", equalizeDrawColumns);
-  window.addEventListener("resize", equalizeDrawColumns);
-  setTimeout(equalizeDrawColumns, 200);
-});
-</script>
+    rounds.forEach(round => {
+      round.style.height = TOTAL + "px";
+      round.style.minHeight = TOTAL + "px";
 
+      const matches = Array.from(round.querySelectorAll(":scope > .match"));
+      const n = matches.length;
+      if (!n) return;
 
-<script id="bracket-midpoint-positioning-js">
-document.addEventListener("DOMContentLoaded", function () {
-  function layoutBracket() {
-    const bracket =
-      document.querySelector(".bracket") ||
-      document.querySelector(".draw-bracket") ||
-      document.querySelector(".tournament-bracket");
-    if (!bracket) return;
-
-    let rounds = Array.from(
-      bracket.querySelectorAll(":scope > .bracket-column, :scope > .round, :scope > .draw-round")
-    );
-    if (!rounds.length) rounds = Array.from(bracket.children);
-    if (rounds.length < 2) return;
-
-    const getMatches = round => Array.from(
-      round.querySelectorAll(":scope > .match, :scope > .match-card, :scope > .bracket-match, :scope > .matches > .match, :scope > .matches > .match-card, :scope > .round-matches > .match, :scope > .round-matches > .match-card, :scope > .bracket-matches > .bracket-match")
-    );
-
-    // Primera ronda conserva su distribución actual.
-    // Cada ronda posterior se centra exactamente entre cada pareja de la anterior.
-    for (let r = 1; r < rounds.length; r++) {
-      const prev = getMatches(rounds[r - 1]);
-      const curr = getMatches(rounds[r]);
-      if (!prev.length || !curr.length) continue;
-
-      const roundRect = rounds[r].getBoundingClientRect();
-
-      curr.forEach((match, i) => {
-        const a = prev[i * 2];
-        const b = prev[i * 2 + 1];
-        if (!a) return;
-
-        const ar = a.getBoundingClientRect();
-        const br = b ? b.getBoundingClientRect() : ar;
-
-        // Centros de los dos partidos anteriores en coordenadas de viewport
-        const centerA = ar.top + ar.height / 2;
-        const centerB = br.top + br.height / 2;
-        const targetCenter = (centerA + centerB) / 2;
-
-        // Posición absoluta relativa a la columna actual
-        const top = targetCenter - roundRect.top - match.offsetHeight / 2;
-
+      matches.forEach((match, i) => {
+        // Centros uniformes:
+        // 16 partidos -> 1/32, 3/32 ... 31/32
+        // 8 partidos  -> 1/16, 3/16 ... 15/16
+        // 4 partidos  -> 1/8, 3/8, 5/8, 7/8
+        // 2 partidos  -> 1/4, 3/4
+        // 1 partido   -> 1/2
+        const centerY = TOP + HEIGHT * ((i + 0.5) / n);
         match.style.position = "absolute";
-        match.style.top = Math.max(64, top) + "px";
-        match.style.left = match.dataset.originalLeft || "";
+        match.style.top = (centerY - match.offsetHeight / 2) + "px";
+        match.style.left = "";
         match.style.right = "";
       });
-    }
-
-    // Igualar altura de todas las columnas según el contenido más bajo
-    let bottom = 0;
-    rounds.forEach(round => {
-      const rr = round.getBoundingClientRect();
-      getMatches(round).forEach(m => {
-        const mr = m.getBoundingClientRect();
-        bottom = Math.max(bottom, mr.bottom - rr.top);
-      });
-    });
-    const h = Math.ceil(bottom + 24);
-    rounds.forEach(round => {
-      round.style.height = h + "px";
-      round.style.minHeight = h + "px";
     });
   }
 
   function run() {
-    requestAnimationFrame(() => requestAnimationFrame(layoutBracket));
+    requestAnimationFrame(() => requestAnimationFrame(layoutBracketSymmetric));
   }
 
   run();
