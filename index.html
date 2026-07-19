@@ -617,6 +617,45 @@ img {
 }
 </style>
 
+
+<style id="mobile-nav-fix-v12">
+/* Android/móvil: menú y selector de idioma en dos filas para que no se tapen */
+@media (max-width: 768px) {
+  header, nav, .nav, .navbar, .topbar {
+    height: auto !important;
+  }
+  nav, .nav, .navbar {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    overflow: visible !important;
+  }
+  nav ul, .nav ul, .navbar ul {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px !important;
+  }
+  .langs {
+    position: static !important;
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 8px 10px 12px !important;
+    box-sizing: border-box !important;
+    overflow-x: auto !important;
+  }
+  .langs button {
+    flex: 0 0 auto !important;
+  }
+}
+</style>
+
 </head><body>
 <header><nav>
 <a href="#inicio" data-i18n="navHome">Inicio</a><a href="#torneo" data-i18n="navTournament">Torneo</a><a href="#programa" data-i18n="navSchedule">Programa</a><a href="#jugadores" data-i18n="navPlayers">Jugadores</a><a href="#cuadro" data-i18n="navDraw">Cuadro</a><a href="#directo" data-i18n="navLive">En directo</a><a href="#sponsors" data-i18n="navSponsors">Sponsors</a>
