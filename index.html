@@ -103,6 +103,59 @@
 }
 </style>
 
+
+<style id="equal-round-column-heights">
+/* Todas las columnas del cuadro ocupan la misma altura total */
+.bracket,
+.draw-bracket,
+.tournament-bracket {
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+/* Compatibilidad con los nombres de clase usados en distintas versiones */
+.bracket-column,
+.round,
+.draw-round {
+  align-self: stretch !important;
+  height: auto !important;
+  min-height: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* El fondo visual de cada ronda llega hasta abajo */
+.bracket-column::before,
+.round::before,
+.draw-round::before {
+  height: 100% !important;
+  min-height: 100% !important;
+}
+
+/* Si el contenedor del cuadro tiene columnas directas */
+.bracket > *,
+.draw-bracket > *,
+.tournament-bracket > * {
+  align-self: stretch !important;
+  box-sizing: border-box !important;
+}
+
+/* Mantener todos los títulos arriba a la misma altura */
+.bracket-column > h2, .bracket-column > h3,
+.round > h2, .round > h3,
+.draw-round > h2, .draw-round > h3,
+.round-title, .bracket-title {
+  top: 0 !important;
+}
+
+/* El área interior de cada ronda rellena la altura disponible */
+.round-matches,
+.matches,
+.bracket-matches {
+  min-height: 100% !important;
+  box-sizing: border-box !important;
+}
+</style>
+
 </head><body>
 <header><nav>
 <a href="#inicio" data-i18n="navHome">Inicio</a><a href="#torneo" data-i18n="navTournament">Torneo</a><a href="#programa" data-i18n="navSchedule">Programa</a><a href="#jugadores" data-i18n="navPlayers">Jugadores</a><a href="#cuadro" data-i18n="navDraw">Cuadro</a><a href="#directo" data-i18n="navLive">En directo</a><a href="#sponsors" data-i18n="navSponsors">Sponsors</a>
@@ -112,11 +165,10 @@
 <img src="assets/images/banner-valencia-2026.jpg" alt="PSA Valencia 2026 Memorial Chimo Marmaneu">
 <div class="hero-overlay">
   <div class="hero-kicker">11 — 15 AGOSTO 2026 · OLYMPIA ALBORAYA · VALENCIA</div>
-  <h1 class="hero-title"><br><br></h1>
-  <div class="hero-subtitle"></div>
+  <h1 class="hero-title">PSA<br>VALENCIA<br>2026</h1>
+  <div class="hero-subtitle">Memorial Chimo Marmaneu</div>
   <div id="count" class="countdown"></div>
   <a class="hero-cta" href="#torneo" data-hero-i18n="discover">DESCUBRE EL TORNEO</a>
-  <h1 class="hero-title"><br><br></h1>
 </div>
 </section>
 <main><section id="torneo"><h1>PSA Valencia 2026 – Memorial Chimo Marmaneu</h1><div class="info"><div><b data-i18n="dates">Fechas</b><span>11–15 agosto 2026</span></div><div><b data-i18n="venue">Sede</b><span>Olympia Alboraya · Valencia</span></div><div><b data-i18n="tour">Circuito</b><span>PSA Squash Tour</span></div><div><b data-i18n="category">Categoría</b><span>Copper · $36,000</span></div></div></section>
@@ -224,6 +276,35 @@ document.addEventListener("DOMContentLoaded", () => {
       card.classList.add("three-line-match");
     }
   });
+});
+</script>
+
+
+<script id="equal-round-column-heights-js">
+document.addEventListener("DOMContentLoaded", function () {
+  function equalizeDrawColumns() {
+    const bracket =
+      document.querySelector(".bracket") ||
+      document.querySelector(".draw-bracket") ||
+      document.querySelector(".tournament-bracket");
+    if (!bracket) return;
+
+    let rounds = Array.from(bracket.querySelectorAll(":scope > .bracket-column, :scope > .round, :scope > .draw-round"));
+    if (!rounds.length) rounds = Array.from(bracket.children);
+    if (!rounds.length) return;
+
+    rounds.forEach(r => r.style.minHeight = "");
+    const maxHeight = Math.max(...rounds.map(r => r.scrollHeight));
+    rounds.forEach(r => {
+      r.style.minHeight = maxHeight + "px";
+      r.style.height = maxHeight + "px";
+    });
+  }
+
+  equalizeDrawColumns();
+  window.addEventListener("load", equalizeDrawColumns);
+  window.addEventListener("resize", equalizeDrawColumns);
+  setTimeout(equalizeDrawColumns, 200);
 });
 </script>
 
