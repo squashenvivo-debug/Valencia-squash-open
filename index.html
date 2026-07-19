@@ -595,6 +595,28 @@ img {
 }
 </style>
 
+
+<style id="mobile-hero-banner-fix-v11">
+/* En móvil/Android: mostrar el banner completo, sin ampliar ni recortar la imagen de Chimo */
+@media (max-width: 768px) {
+  .hero,
+  #home,
+  .hero-banner {
+    background-size: contain !important;
+    background-position: center top !important;
+    background-repeat: no-repeat !important;
+  }
+  .hero img,
+  #home > img,
+  .hero-banner img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+    object-position: center top !important;
+  }
+}
+</style>
+
 </head><body>
 <header><nav>
 <a href="#inicio" data-i18n="navHome">Inicio</a><a href="#torneo" data-i18n="navTournament">Torneo</a><a href="#programa" data-i18n="navSchedule">Programa</a><a href="#jugadores" data-i18n="navPlayers">Jugadores</a><a href="#cuadro" data-i18n="navDraw">Cuadro</a><a href="#directo" data-i18n="navLive">En directo</a><a href="#sponsors" data-i18n="navSponsors">Sponsors</a>
