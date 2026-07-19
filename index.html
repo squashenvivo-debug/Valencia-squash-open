@@ -350,7 +350,7 @@ async function loadGallery(){
  const lang=(document.documentElement.lang||'es').slice(0,2);
  const label=lang==='va'?'Veure galeria':lang==='en'?'View gallery':lang==='fr'?'Voir la galerie':'Ver galería';
  grid.className='gallery-cards';
- grid.innerHTML=Object.entries(groups).map(([tag,g])=>`<article class="gallery-card"><img src="${g.cover}" alt="${escapeNews(tag)}" loading="lazy"><div class="gallery-card-body"><h3>${escapeNews(tag)}</h3>${g.note?`<p>${escapeNews(g.note)}</p>`:''}<a class="btn" href="galeria.html?jornada=${encodeURIComponent(tag)}&lang=${lang}">${label} · ${g.count}</a></div></article>`).join('');
+ grid.innerHTML=Object.entries(groups).map(([tag,g])=>`<article class="gallery-card"><img src="${g.cover}" alt="${escapeNews(tag)}" loading="lazy"><div class="gallery-card-body"><h3>${escapeNews(tag)}</h3>${g.note?`<p>${escapeNews(g.note)}</p>`:''}<a class="btn" href="galeria.html?jornada=${encodeURIComponent(tag)}&lang=${lang}">${label}</a></div></article>`).join('');
 }
 loadGallery();
 document.querySelectorAll('.langs button').forEach(b=>b.addEventListener('click',loadGallery));
