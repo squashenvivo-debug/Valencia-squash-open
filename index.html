@@ -470,6 +470,51 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+
+<style id="equal-round-columns-v9">
+/* Todas las columnas del cuadro deben tener exactamente la misma altura visual */
+.bracket {
+    align-items: stretch !important;
+}
+.bracket > .round {
+    align-self: stretch !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    box-sizing: border-box !important;
+}
+</style>
+<script id="equal-round-columns-v9-js">
+(function(){
+  function equalizeRoundColumns(){
+    const bracket=document.querySelector('.bracket');
+    if(!bracket) return;
+    const rounds=[...bracket.querySelectorAll(':scope > .round')];
+    if(!rounds.length) return;
+
+    /* Tomamos la primera ronda como referencia, incluyendo el último partido */
+    const first=rounds[0];
+    const matches=[...first.querySelectorAll(':scope > .match')];
+    let required=first.scrollHeight;
+    matches.forEach(m=>{
+      required=Math.max(required,m.offsetTop+m.offsetHeight+60);
+    });
+    required=Math.max(required,2800);
+
+    bracket.style.height=required+'px';
+    bracket.style.minHeight=required+'px';
+
+    rounds.forEach(r=>{
+      r.style.height=required+'px';
+      r.style.minHeight=required+'px';
+      r.style.maxHeight='none';
+    });
+  }
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(equalizeRoundColumns,100));
+  window.addEventListener('load',()=>setTimeout(equalizeRoundColumns,1300));
+  window.addEventListener('resize',equalizeRoundColumns);
+})();
+</script>
+
 </head><body>
 <header><nav>
 <a href="#inicio" data-i18n="navHome">Inicio</a><a href="#torneo" data-i18n="navTournament">Torneo</a><a href="#programa" data-i18n="navSchedule">Programa</a><a href="#jugadores" data-i18n="navPlayers">Jugadores</a><a href="#cuadro" data-i18n="navDraw">Cuadro</a><a href="#directo" data-i18n="navLive">En directo</a><a href="#sponsors" data-i18n="navSponsors">Sponsors</a>
