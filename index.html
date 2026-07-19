@@ -6,10 +6,11 @@
 <section id="inicio" class="hero">
 <img src="assets/images/banner-valencia-2026.jpg" alt="PSA Valencia 2026 Memorial Chimo Marmaneu">
 <div class="hero-overlay">
-  <div class="hero-title">PSA VALENCIA 2026</div>
-  <div class="hero-subtitle">MEMORIAL CHIMO MARMANEU</div>
-  <div class="hero-date">11–15 AGOSTO 2026 · OLYMPIA ALBORAYA</div>
+  <div class="hero-kicker">11 — 15 AGOSTO 2026 · OLYMPIA ALBORAYA · VALENCIA</div>
+  <h1 class="hero-title">PSA<br>VALENCIA<br>2026</h1>
+  <div class="hero-subtitle">Memorial Chimo Marmaneu</div>
   <div id="count" class="countdown"></div>
+  <a class="hero-cta" href="#torneo" data-hero-i18n="discover">DESCUBRE EL TORNEO</a>
 </div>
 </section>
 <main><section id="torneo"><h1>PSA Valencia 2026 – Memorial Chimo Marmaneu</h1><div class="info"><div><b data-i18n="dates">Fechas</b><span>11–15 agosto 2026</span></div><div><b data-i18n="venue">Sede</b><span>Olympia Alboraya · Valencia</span></div><div><b data-i18n="tour">Circuito</b><span>PSA Squash Tour</span></div><div><b data-i18n="category">Categoría</b><span>Copper · $36,000</span></div></div></section>
@@ -69,7 +70,7 @@ va:{navHome:"Inici",navTournament:"Torneig",navSchedule:"Programa",navPlayers:"J
 en:{navHome:"Home",navTournament:"Tournament",navSchedule:"Schedule",navPlayers:"Players",navDraw:"Draw",navLive:"Live",navSponsors:"Sponsors",dates:"Dates",venue:"Venue",tour:"Tour",category:"Category",scheduleTitle:"Schedule and match times",scheduleText:"Match times will be displayed alongside each match in the draw once officially confirmed.",playersTitle:"Players",drawTitle:"Tournament draw",drawHint:"← Swipe horizontally to view all rounds →",round1:"First round",round2:"Second round",quarters:"Quarter-finals",semis:"Semi-finals",final:"Final",liveTitle:"Live",liveText:"Live streams and live tournament results.",sponsorsTitle:"Sponsors and partners"},
 fr:{navHome:"Accueil",navTournament:"Tournoi",navSchedule:"Programme",navPlayers:"Joueurs",navDraw:"Tableau",navLive:"En direct",navSponsors:"Sponsors",dates:"Dates",venue:"Lieu",tour:"Circuit",category:"Catégorie",scheduleTitle:"Programme et horaires",scheduleText:"Les horaires seront affichés à côté de chaque match du tableau dès leur confirmation officielle.",playersTitle:"Joueurs",drawTitle:"Tableau du tournoi",drawHint:"← Faites défiler horizontalement pour voir tous les tours →",round1:"Premier tour",round2:"Deuxième tour",quarters:"Quarts de finale",semis:"Demi-finales",final:"Finale",liveTitle:"En direct",liveText:"Diffusions et résultats du tournoi en direct.",sponsorsTitle:"Sponsors et partenaires"}
 };
-function setLang(lang){document.documentElement.lang=lang;localStorage.setItem("vsoLang",lang);document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.dataset.i18n;if(I18N[lang]&&I18N[lang][k])el.textContent=I18N[lang][k]});document.querySelectorAll(".languages button").forEach(b=>b.classList.toggle("active",b.textContent.toLowerCase()===(lang==="va"?"val":lang)))}
+function setLang(lang){document.documentElement.lang=lang;localStorage.setItem("vsoLang",lang);const hd={es:"DESCUBRE EL TORNEO",va:"DESCOBRIX EL TORNEIG",en:"DISCOVER THE TOURNAMENT",fr:"DÉCOUVRIR LE TOURNOI"};document.querySelectorAll("[data-hero-i18n]").forEach(el=>el.textContent=hd[lang]||hd.es);document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.dataset.i18n;if(I18N[lang]&&I18N[lang][k])el.textContent=I18N[lang][k]});document.querySelectorAll(".languages button").forEach(b=>b.classList.toggle("active",b.textContent.toLowerCase()===(lang==="va"?"val":lang)))}
 document.addEventListener("DOMContentLoaded",()=>setLang(localStorage.getItem("vsoLang")||"es"));
 </script><script>
 const target=new Date('2026-08-11T09:00:00+02:00');

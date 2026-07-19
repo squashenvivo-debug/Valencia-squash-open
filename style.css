@@ -24,3 +24,46 @@
 .hero-date{font-size:clamp(13px,1.5vw,20px);font-weight:700;margin-top:16px}
 .countdown{margin-top:22px;padding:12px 22px;border:1px solid rgba(255,255,255,.75);background:rgba(0,59,73,.82);border-radius:8px;font-size:clamp(16px,2vw,28px);font-weight:900;letter-spacing:.04em}
 @media(max-width:700px){.hero-overlay{padding:12px}.hero-title{font-size:clamp(25px,8vw,42px)}.hero-subtitle{font-size:clamp(14px,4vw,22px)}.hero-date{margin-top:8px}.countdown{margin-top:10px;padding:8px 10px;font-size:clamp(12px,3.5vw,17px)}}
+
+/* FINAL FIX: flags fully inside player cards */
+.players{background:#f4f7f8!important;padding:0 12px!important;overflow:hidden!important}
+.player{background:#fbfcfc!important;grid-template-columns:45px 72px minmax(0,1fr) 90px!important;padding:0 18px 0 0!important;width:100%!important;overflow:hidden!important}
+.flag{width:90px!important;min-width:90px!important;height:54px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;overflow:visible!important}
+.flag img{width:68px!important;height:44px!important;max-width:68px!important;object-fit:contain!important;display:block!important;border-radius:4px!important}
+@media(max-width:700px){
+ .players{padding:0 6px!important}
+ .player{grid-template-columns:38px 58px minmax(0,1fr) 62px!important;padding-right:6px!important}
+ .flag{width:62px!important;min-width:62px!important;height:42px!important}
+ .flag img{width:52px!important;height:34px!important;max-width:52px!important;object-fit:contain!important}
+}
+/* FINAL FIX: title and countdown always visible over banner */
+.hero{position:relative!important;min-height:260px!important}
+.hero img{width:100%!important;display:block!important}
+.hero-overlay{position:absolute!important;inset:0!important;z-index:2!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;color:#fff!important;padding:20px!important;background:linear-gradient(90deg,rgba(0,25,38,.62),rgba(0,25,38,.12),rgba(0,25,38,.62))!important;text-shadow:0 2px 10px #000!important}
+.hero-title{font-size:clamp(32px,6vw,80px)!important;font-weight:900!important}
+.hero-subtitle{font-size:clamp(18px,2.6vw,36px)!important;font-weight:800!important;margin-top:8px!important}
+.hero-date{font-size:clamp(13px,1.5vw,20px)!important;font-weight:700!important;margin-top:12px!important}
+.countdown{display:block!important;margin-top:18px!important;padding:11px 20px!important;background:rgba(0,59,73,.9)!important;border:1px solid rgba(255,255,255,.8)!important;border-radius:8px!important;font-size:clamp(15px,2vw,27px)!important;font-weight:900!important}
+
+/* HERO EXACT STYLE: left aligned like supplied reference */
+.hero{position:relative!important;min-height:520px!important;background:#071f2a!important;overflow:hidden!important}
+.hero>img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
+.hero:after{content:""!important;position:absolute!important;inset:0!important;z-index:1!important;background:linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.48) 38%,rgba(0,0,0,.12) 72%)!important}
+.hero-overlay{position:relative!important;inset:auto!important;z-index:2!important;max-width:1200px!important;min-height:520px!important;margin:0 auto!important;padding:28px 24px 38px!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;text-align:left!important;background:none!important;color:#fff!important;text-shadow:0 2px 8px rgba(0,0,0,.45)!important}
+.hero-kicker{font-size:15px!important;font-weight:800!important;letter-spacing:.16em!important;text-transform:uppercase!important;margin-bottom:12px!important}
+.hero-title{margin:0!important;color:#fff!important;font-size:clamp(68px,9vw,132px)!important;line-height:.86!important;letter-spacing:.01em!important;font-weight:900!important;text-transform:uppercase!important}
+.hero-subtitle{font-size:clamp(28px,3.2vw,48px)!important;line-height:1.05!important;font-weight:900!important;margin-top:20px!important}
+.countdown{margin-top:26px!important;padding:0!important;border:0!important;background:none!important;border-radius:0!important;font-size:clamp(16px,1.7vw,24px)!important;font-weight:900!important;letter-spacing:.02em!important;text-shadow:0 2px 6px rgba(0,0,0,.7)!important}
+.hero-cta{display:inline-block!important;margin-top:24px!important;padding:15px 24px!important;background:#c9143d!important;color:#fff!important;text-decoration:none!important;font-weight:900!important;font-size:16px!important;text-shadow:none!important}
+@media(max-width:700px){
+ .hero{min-height:500px!important}
+ .hero-overlay{min-height:500px!important;padding:18px 7px 30px!important;justify-content:center!important}
+ .hero-kicker{font-size:12px!important;letter-spacing:.13em!important;margin-bottom:14px!important}
+ .hero-title{font-size:clamp(62px,19vw,96px)!important;line-height:.82!important}
+ .hero-subtitle{font-size:clamp(27px,7vw,38px)!important;white-space:nowrap!important;margin-top:22px!important}
+ .countdown{font-size:16px!important;margin-top:26px!important}
+ .hero-cta{margin-top:22px!important;padding:14px 22px!important}
+}
+@media(max-width:420px){
+ .hero-subtitle{white-space:normal!important}
+}
