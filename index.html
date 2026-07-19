@@ -210,12 +210,26 @@ document.addEventListener("DOMContentLoaded",function(){
   .heroText{position:relative}
   .count{
     position:absolute!important;
-    left:calc(100% + 70px)!important;
+    left:calc(100% + 25px)!important;
     top:50%!important;
     transform:translateY(-50%)!important;
     margin-top:0!important;
     flex-wrap:nowrap!important;
     z-index:3;
+  }
+}
+</style>
+
+
+<style id="desktop-view-draw-right-of-venue">
+@media (min-width:851px){
+  .heroText>.btn{
+    position:absolute!important;
+    left:calc(100% + 25px)!important;
+    top:calc(50% + 92px)!important;
+    margin:0!important;
+    white-space:nowrap!important;
+    z-index:4;
   }
 }
 </style>
