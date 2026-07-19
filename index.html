@@ -431,6 +431,45 @@ document.addEventListener("DOMContentLoaded", function () {
 }
 </style>
 
+
+<style id="bracket-containment-v8">
+/* La altura de todas las columnas acompaña a todo el cuadro */
+.bracket {
+    min-height: 2800px !important;
+    align-items: stretch !important;
+}
+.bracket > .round {
+    height: 2800px !important;
+    min-height: 2800px !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+</style>
+<script id="bracket-containment-v8-js">
+(function(){
+  function containMatches(){
+    const bracket=document.querySelector('.bracket');
+    if(!bracket) return;
+    const rounds=[...bracket.querySelectorAll(':scope > .round')];
+    let maxBottom=0;
+    rounds.forEach(r=>{
+      [...r.querySelectorAll(':scope > .match')].forEach(m=>{
+        maxBottom=Math.max(maxBottom,m.offsetTop+m.offsetHeight);
+      });
+    });
+    const h=Math.max(2800,maxBottom+80);
+    bracket.style.height=h+'px';
+    bracket.style.minHeight=h+'px';
+    rounds.forEach(r=>{
+      r.style.height=h+'px';
+      r.style.minHeight=h+'px';
+    });
+  }
+  window.addEventListener('load',()=>setTimeout(containMatches,1200));
+  window.addEventListener('resize',containMatches);
+})();
+</script>
+
 </head><body>
 <header><nav>
 <a href="#inicio" data-i18n="navHome">Inicio</a><a href="#torneo" data-i18n="navTournament">Torneo</a><a href="#programa" data-i18n="navSchedule">Programa</a><a href="#jugadores" data-i18n="navPlayers">Jugadores</a><a href="#cuadro" data-i18n="navDraw">Cuadro</a><a href="#directo" data-i18n="navLive">En directo</a><a href="#sponsors" data-i18n="navSponsors">Sponsors</a>
