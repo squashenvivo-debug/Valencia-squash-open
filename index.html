@@ -248,7 +248,7 @@ document.addEventListener("DOMContentLoaded",function(){
 .news-card{background:var(--n2);overflow:hidden;border-bottom:3px solid var(--a)}
 .news-card img{width:100%;height:220px;object-fit:cover;display:block}
 .news-body{padding:20px}.news-date{color:var(--a);font:700 13px 'Barlow Condensed';text-transform:uppercase}
-.news-card h3{color:#fff;font-size:24px;margin:8px 0 10px}.news-card p{color:var(--m);line-height:1.6;white-space:pre-line}
+.news-card h3{color:#fff;font-size:24px;margin:8px 0 10px}.news-card p{color:var(--m);line-height:1.6;white-space:pre-line}.news-more{margin-top:8px}
 @media(max-width:850px){.news-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.news-grid{grid-template-columns:1fr}.news-card img{height:210px}}
 </style>
@@ -280,7 +280,7 @@ async function loadNews(){
  const {data,error}=await newsClient.from('news').select('*').order('news_date',{ascending:false}).order('created_at',{ascending:false});
  if(error){grid.innerHTML='<p class="note">No se han podido cargar las noticias.</p>';return;}
  if(!data||!data.length){grid.innerHTML='<p class="note">Próximamente publicaremos las noticias del torneo.</p>';return;}
- grid.innerHTML=data.map(n=>`<article class="news-card">${n.image_url?`<img src="${n.image_url}" alt="">`:''}<div class="news-body"><div class="news-date">${new Date(n.news_date+'T12:00:00').toLocaleDateString(document.documentElement.lang||'es',{day:'2-digit',month:'long',year:'numeric'})}</div><h3>${escapeNews(n.title)}</h3><p>${escapeNews(n.description)}</p></div></article>`).join('');
+ grid.innerHTML=data.map(n=>{const excerpt=(n.description||'').length>180?(n.description||'').slice(0,180).trim()+'…':(n.description||'');return `<article class="news-card">${n.image_url?`<img src="${n.image_url}" alt="">`:''}<div class="news-body"><div class="news-date">${new Date(n.news_date+'T12:00:00').toLocaleDateString(document.documentElement.lang||'es',{day:'2-digit',month:'long',year:'numeric'})}</div><h3>${escapeNews(n.title)}</h3><p>${escapeNews(excerpt)}</p><a class="btn news-more" href="noticia.html?id=${encodeURIComponent(n.id)}">Leer más</a></div></article>`}).join('');
 }
 function escapeNews(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
 loadNews();

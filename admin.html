@@ -29,13 +29,18 @@ button:disabled{opacity:.5}.hidden{display:none!important}.msg{margin-top:15px;p
 <div id="publisher" class="box hidden">
 <h2>Publicar noticia</h2>
 <div id="who"></div>
+<input id="editId" type="hidden"><input id="oldImage" type="hidden">
 <label>Título</label><input id="title">
 <label>Fecha</label><input id="newsDate" type="date">
 <label>Imagen</label><input id="image" type="file" accept="image/*">
 <label>Descripción / noticia</label><textarea id="description"></textarea>
 <button id="publish" type="button">PUBLICAR NOTICIA</button>
+<button id="cancelEdit" type="button" class="hidden">CANCELAR EDICIÓN</button>
 <button id="logout" type="button">CERRAR SESIÓN</button>
 <div id="pubMsg" class="msg hidden"></div>
+<hr style="border:0;border-top:1px solid #31536a;margin:28px 0">
+<h2>Noticias publicadas</h2>
+<div id="newsList">Cargando...</div>
 </div>
 </main>
 <script>
@@ -54,7 +59,7 @@ button:disabled{opacity:.5}.hidden{display:none!important}.msg{margin-top:15px;p
     const session=res.data.session;
     el('loginBox').classList.toggle('hidden',!!session);
     el('publisher').classList.toggle('hidden',!session);
-    if(session)el('who').textContent='Sesión iniciada: '+session.user.email;
+    if(session){el('who').textContent='Sesión iniciada: '+session.user.email; await loadNewsList();}
   }
 
   el('login').addEventListener('click',async function(){
@@ -80,7 +85,7 @@ button:disabled{opacity:.5}.hidden{display:none!important}.msg{margin-top:15px;p
     if(!title||!description||!news_date){msg('pubMsg','Completa título, fecha y descripción.','error');return;}
     this.disabled=true;msg('pubMsg','Publicando...');
     try{
-      let image_url=null;
+      let image_url=el('oldImage').value||null;
       if(file){
         const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
         const path=Date.now()+'-'+Math.random().toString(36).slice(2)+'.'+ext;
@@ -88,13 +93,41 @@ button:disabled{opacity:.5}.hidden{display:none!important}.msg{margin-top:15px;p
         if(up.error)throw up.error;
         image_url=client.storage.from('news-images').getPublicUrl(path).data.publicUrl;
       }
-      const ins=await client.from('news').insert({title,description,news_date,image_url});
-      if(ins.error)throw ins.error;
-      msg('pubMsg','Noticia publicada correctamente. Ya debe aparecer en la web.','ok');
-      el('title').value='';el('description').value='';el('image').value='';
+      const editId=el('editId').value;
+      const save=editId
+        ? await client.from('news').update({title,description,news_date,image_url,updated_at:new Date().toISOString()}).eq('id',editId)
+        : await client.from('news').insert({title,description,news_date,image_url});
+      if(save.error)throw save.error;
+      msg('pubMsg',editId?'Noticia actualizada correctamente.':'Noticia publicada correctamente. Ya debe aparecer en la web.','ok');
+      resetForm(); await loadNewsList();
     }catch(err){msg('pubMsg','ERROR: '+(err.message||String(err)),'error');}
     finally{this.disabled=false;}
   });
+
+  function esc(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+  function resetForm(){
+    el('editId').value='';el('oldImage').value='';el('title').value='';el('description').value='';el('image').value='';
+    el('newsDate').value=new Date().toISOString().slice(0,10);el('publish').textContent='PUBLICAR NOTICIA';el('cancelEdit').classList.add('hidden');
+  }
+  el('cancelEdit').addEventListener('click',resetForm);
+  async function loadNewsList(){
+    const res=await client.from('news').select('*').order('news_date',{ascending:false}).order('created_at',{ascending:false});
+    if(res.error){el('newsList').textContent='Error: '+res.error.message;return;}
+    if(!res.data||!res.data.length){el('newsList').textContent='No hay noticias publicadas.';return;}
+    el('newsList').innerHTML=res.data.map(n=>`<div style="padding:16px 0;border-top:1px solid #31536a"><b>${esc(n.title)}</b><br><small>${n.news_date}</small><br><button type="button" onclick="editNews(${n.id})">EDITAR</button><button type="button" onclick="deleteNews(${n.id})" style="background:#b73535;color:white;margin-left:8px">ELIMINAR</button></div>`).join('');
+    window.__news=res.data;
+  }
+  window.editNews=function(id){
+    const n=(window.__news||[]).find(x=>String(x.id)===String(id));if(!n)return;
+    el('editId').value=n.id;el('oldImage').value=n.image_url||'';el('title').value=n.title;el('newsDate').value=n.news_date;el('description').value=n.description;
+    el('publish').textContent='GUARDAR CAMBIOS';el('cancelEdit').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});
+  };
+  window.deleteNews=async function(id){
+    if(!confirm('¿Seguro que quieres eliminar esta noticia?'))return;
+    const res=await client.from('news').delete().eq('id',id);
+    if(res.error){alert('Error: '+res.error.message);return;} await loadNewsList();
+  };
+
   showSession().catch(e=>msg('loginMsg','ERROR INICIAL: '+e.message,'error'));
 })();
 </script>

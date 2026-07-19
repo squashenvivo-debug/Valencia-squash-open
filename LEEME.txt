@@ -1,0 +1,1 @@
+Sube los 3 archivos a la raíz de GitHub: index.html, admin.html y noticia.html. Sustituye los existentes. No hace falta cambiar Supabase.
