@@ -296,6 +296,58 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+
+<style id="bracket-gap-v4">
+.bracket > .round > .match {
+  height: 96px !important;
+  min-height: 96px !important;
+  max-height: 96px !important;
+}
+</style>
+<script id="bracket-gap-positioning-v4">
+document.addEventListener("DOMContentLoaded", function () {
+  function layoutV4() {
+    const bracket = document.querySelector(".bracket");
+    if (!bracket) return;
+    const rounds = Array.from(bracket.querySelectorAll(":scope > .round"));
+    if (!rounds.length) return;
+
+    const TOP = 64, CARD = 96, GAP = 24;
+    const firstMatches = Array.from(rounds[0].querySelectorAll(":scope > .match"));
+    const usableHeight = firstMatches.length * CARD + (firstMatches.length - 1) * GAP;
+    const totalHeight = TOP + usableHeight + 32;
+
+    rounds.forEach((round, r) => {
+      round.style.height = totalHeight + "px";
+      round.style.minHeight = totalHeight + "px";
+      const matches = Array.from(round.querySelectorAll(":scope > .match"));
+      const n = matches.length;
+
+      matches.forEach((match, i) => {
+        let centerY;
+        if (r === 0) {
+          centerY = TOP + CARD/2 + i * (CARD + GAP);
+        } else {
+          // Same tournament-tree geometry: later rounds centered over equal sections
+          centerY = TOP + usableHeight * ((i + 0.5) / n);
+        }
+        match.style.position = "absolute";
+        match.style.height = CARD + "px";
+        match.style.minHeight = CARD + "px";
+        match.style.maxHeight = CARD + "px";
+        match.style.top = (centerY - CARD/2) + "px";
+      });
+    });
+  }
+  function run(){requestAnimationFrame(()=>requestAnimationFrame(layoutV4));}
+  run();
+  window.addEventListener("load",run);
+  window.addEventListener("resize",run);
+  setTimeout(run,250);
+  setTimeout(run,700);
+});
+</script>
+
 </head><body>
 <header><nav>
 <a href="#inicio" data-i18n="navHome">Inicio</a><a href="#torneo" data-i18n="navTournament">Torneo</a><a href="#programa" data-i18n="navSchedule">Programa</a><a href="#jugadores" data-i18n="navPlayers">Jugadores</a><a href="#cuadro" data-i18n="navDraw">Cuadro</a><a href="#directo" data-i18n="navLive">En directo</a><a href="#sponsors" data-i18n="navSponsors">Sponsors</a>
