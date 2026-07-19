@@ -515,6 +515,86 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+
+<style id="android-responsive-v10">
+/* Compatibilidad móvil Android: conservar el cuadro completo con scroll horizontal */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+img {
+  max-width: 100%;
+}
+.bracket-scroll,
+.draw-scroll,
+.bracket-wrapper {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: auto !important;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+}
+.bracket {
+  min-width: 1200px;
+}
+/* Evita que Android comprima las columnas y corte nombres */
+.bracket > .round {
+  flex-shrink: 0 !important;
+  min-width: 210px;
+}
+.bracket > .round > .match {
+  overflow: visible;
+}
+.bracket > .round > .match,
+.bracket > .round > .match * {
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  .bracket {
+    width: max-content !important;
+    min-width: 1200px !important;
+  }
+  .bracket > .round {
+    width: 220px !important;
+    min-width: 220px !important;
+  }
+  .bracket > .round > .match {
+    width: calc(100% - 24px) !important;
+    max-width: calc(100% - 24px) !important;
+  }
+}
+</style>
+<script id="android-scroll-wrapper-v10">
+(function(){
+ function prepareMobileBracket(){
+   const bracket=document.querySelector('.bracket');
+   if(!bracket || bracket.parentElement.classList.contains('android-bracket-scroll')) return;
+   const wrap=document.createElement('div');
+   wrap.className='android-bracket-scroll';
+   wrap.style.width='100%';
+   wrap.style.maxWidth='100vw';
+   wrap.style.overflowX='auto';
+   wrap.style.overflowY='visible';
+   wrap.style.webkitOverflowScrolling='touch';
+   bracket.parentNode.insertBefore(wrap,bracket);
+   wrap.appendChild(bracket);
+ }
+ document.addEventListener('DOMContentLoaded',prepareMobileBracket);
+})();
+</script>
+<style>
+.android-bracket-scroll{
+  width:100%;
+  max-width:100vw;
+  overflow-x:auto !important;
+  overflow-y:visible;
+  -webkit-overflow-scrolling:touch;
+}
+</style>
+
 </head><body>
 <header><nav>
 <a href="#inicio" data-i18n="navHome">Inicio</a><a href="#torneo" data-i18n="navTournament">Torneo</a><a href="#programa" data-i18n="navSchedule">Programa</a><a href="#jugadores" data-i18n="navPlayers">Jugadores</a><a href="#cuadro" data-i18n="navDraw">Cuadro</a><a href="#directo" data-i18n="navLive">En directo</a><a href="#sponsors" data-i18n="navSponsors">Sponsors</a>
