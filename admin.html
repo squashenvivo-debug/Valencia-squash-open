@@ -1,97 +1,101 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Administración · PSA Valencia 2026</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Publicador de noticias · PSA Valencia 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#001b2d;color:#fff;font-family:Arial,sans-serif}.wrap{max-width:950px;margin:auto;padding:30px 20px}
-.panel{background:#002b49;padding:25px;border-radius:8px;margin:25px 0}h1,h2{margin-top:0}label{display:block;margin:15px 0 6px;color:#c1d0d9}
-input,textarea{width:100%;padding:12px;border:1px solid #42657b;border-radius:4px;background:#fff;color:#111}textarea{min-height:180px;resize:vertical}
-button{background:#ff7900;border:0;padding:12px 20px;font-weight:bold;cursor:pointer;border-radius:4px;margin-top:15px}button.danger{background:#b73535;color:#fff;margin-left:8px}
-.hidden{display:none}#status{margin:15px 0;color:#f7c52b}.newsItem{border-top:1px solid #31536a;padding:16px 0}.newsItem img{max-width:140px;max-height:90px;object-fit:cover;vertical-align:middle;margin-right:15px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-</style></head><body><div class="wrap">
-<h1>PSA Valencia 2026 · Administración</h1>
-<div id="loginPanel" class="panel"><h2>Acceso de editores</h2>
+*{box-sizing:border-box}body{margin:0;background:#001b2d;color:#fff;font-family:Arial,sans-serif}
+main{max-width:800px;margin:40px auto;padding:20px}.box{background:#002b49;padding:25px;border-radius:8px;margin-bottom:22px}
+h1,h2{margin-top:0}label{display:block;margin:14px 0 6px;color:#c1d0d9}
+input,textarea{width:100%;padding:13px;border:1px solid #527287;border-radius:4px;font-size:16px}
+textarea{min-height:180px}button{border:0;background:#ff7900;color:#001b2d;padding:13px 22px;font-weight:700;border-radius:4px;cursor:pointer;margin-top:16px}
+button:disabled{opacity:.5}.hidden{display:none!important}.msg{margin-top:15px;padding:12px;background:#001b2d;border-left:3px solid #f7c52b;white-space:pre-wrap}
+.error{border-left-color:#ff5252}.ok{border-left-color:#4caf50}small{color:#9fb2bd}
+</style>
+</head>
+<body><main>
+<h1>PSA Valencia 2026</h1>
+<div id="loginBox" class="box">
+<h2>Acceso al publicador</h2>
+<p><small>Introduce exactamente el email con el que creaste el usuario en Supabase.</small></p>
 <label>Email</label><input id="email" type="email" autocomplete="username">
 <label>Contraseña</label><input id="password" type="password" autocomplete="current-password">
-<button id="loginBtn">Entrar</button><div id="loginStatus"></div></div>
+<button id="login" type="button">ENTRAR</button>
+<div id="loginMsg" class="msg hidden"></div>
+</div>
 
-<div id="adminPanel" class="hidden">
-<div class="top"><h2>Publicar noticia</h2><button id="logoutBtn">Cerrar sesión</button></div>
-<div class="panel">
-<input type="hidden" id="editId">
-<input type="hidden" id="oldImage">
-<label>Título</label><input id="title" maxlength="250">
-<label>Fecha</label><input id="date" type="date">
+<div id="publisher" class="box hidden">
+<h2>Publicar noticia</h2>
+<div id="who"></div>
+<label>Título</label><input id="title">
+<label>Fecha</label><input id="newsDate" type="date">
 <label>Imagen</label><input id="image" type="file" accept="image/*">
 <label>Descripción / noticia</label><textarea id="description"></textarea>
-<button id="saveBtn">Publicar noticia</button>
-<button id="cancelBtn" class="hidden">Cancelar edición</button>
-<div id="status"></div>
+<button id="publish" type="button">PUBLICAR NOTICIA</button>
+<button id="logout" type="button">CERRAR SESIÓN</button>
+<div id="pubMsg" class="msg hidden"></div>
 </div>
-<div class="panel"><h2>Noticias publicadas</h2><div id="list"></div></div>
-</div></div>
+</main>
 <script>
-const URL="https://texjzaanugmssmolzwgb.supabase.co", KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRleGp6YWFudWdtc3Ntb2x6d2diIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0NzU5MDYsImV4cCI6MjEwMDA1MTkwNn0.L36iUvzMeZnLfT-3sqXzjPFJ_S_of20ATi1_QKKxWGo";
-const db=supabase.createClient(URL,KEY);
-const $=id=>document.getElementById(id);
-$('date').value=new Date().toISOString().slice(0,10);
+(function(){
+  const URL="https://texjzaanugmssmolzwgb.supabase.co";
+  const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRleGp6YWFudWdtc3Ntb2x6d2diIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0NzU5MDYsImV4cCI6MjEwMDA1MTkwNn0.L36iUvzMeZnLfT-3sqXzjPFJ_S_of20ATi1_QKKxWGo";
+  const el=id=>document.getElementById(id);
+  function msg(id,text,type){const x=el(id);x.textContent=text;x.className='msg '+(type||'');}
+  function hideMsg(id){el(id).className='msg hidden';}
+  if(!window.supabase){msg('loginMsg','ERROR: No se ha podido cargar la librería de Supabase. Comprueba la conexión a Internet.','error');return;}
+  const client=window.supabase.createClient(URL,KEY);
+  el('newsDate').value=new Date().toISOString().slice(0,10);
 
-async function refreshSession(){
- const {data:{session}}=await db.auth.getSession();
- $('loginPanel').classList.toggle('hidden',!!session);
- $('adminPanel').classList.toggle('hidden',!session);
- if(session) loadList();
-}
-$('loginBtn').onclick=async()=>{
- try{
-   const email=$('email').value.trim();
-   const password=$('password').value;
-   if(!email || !password){ $('loginStatus').textContent='Introduce email y contraseña.'; return; }
-   $('loginStatus').textContent='Entrando...';
-   $('loginBtn').disabled=true;
-   const {data,error}=await db.auth.signInWithPassword({email,password});
-   if(error) throw error;
-   $('loginStatus').textContent='Acceso correcto.';
-   await refreshSession();
- }catch(e){
-   $('loginStatus').textContent='Error de acceso: '+(e.message||e);
- }finally{
-   $('loginBtn').disabled=false;
- }
-};
-$('logoutBtn').onclick=async()=>{await db.auth.signOut();refreshSession();};
+  async function showSession(){
+    const res=await client.auth.getSession();
+    const session=res.data.session;
+    el('loginBox').classList.toggle('hidden',!!session);
+    el('publisher').classList.toggle('hidden',!session);
+    if(session)el('who').textContent='Sesión iniciada: '+session.user.email;
+  }
 
-async function uploadImage(file){
- if(!file)return null;
- const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
- const name=`${Date.now()}-${crypto.randomUUID()}.${ext}`;
- const {error}=await db.storage.from('news-images').upload(name,file,{cacheControl:'3600',upsert:false});
- if(error)throw error;
- return db.storage.from('news-images').getPublicUrl(name).data.publicUrl;
-}
-$('saveBtn').onclick=async()=>{
- try{
-  const title=$('title').value.trim(),description=$('description').value.trim(),news_date=$('date').value;
-  if(!title||!description||!news_date)throw new Error('Completa título, fecha y descripción.');
-  $('status').textContent='Guardando...'; $('saveBtn').disabled=true;
-  let image_url=$('oldImage').value||null;
-  if($('image').files[0]) image_url=await uploadImage($('image').files[0]);
-  const payload={title,description,news_date,image_url,updated_at:new Date().toISOString()};
-  let q=$('editId').value?db.from('news').update(payload).eq('id',$('editId').value):db.from('news').insert(payload);
-  const {error}=await q;if(error)throw error;
-  resetForm();$('status').textContent='Noticia guardada correctamente.';await loadList();
- }catch(e){$('status').textContent=e.message}finally{$('saveBtn').disabled=false}
-};
-function resetForm(){$('editId').value='';$('oldImage').value='';$('title').value='';$('description').value='';$('image').value='';$('date').value=new Date().toISOString().slice(0,10);$('saveBtn').textContent='Publicar noticia';$('cancelBtn').classList.add('hidden')}
-$('cancelBtn').onclick=resetForm;
-async function loadList(){
- const {data,error}=await db.from('news').select('*').order('news_date',{ascending:false});
- if(error){$('list').textContent=error.message;return}
- $('list').innerHTML=(data||[]).map(n=>`<div class="newsItem">${n.image_url?`<img src="${n.image_url}">`:''}<b>${esc(n.title)}</b> · ${n.news_date}<br><button onclick='editNews(${JSON.stringify(n)})'>Editar</button><button class="danger" onclick="deleteNews(${n.id})">Eliminar</button></div>`).join('')||'No hay noticias.';
-}
-window.editNews=n=>{$('editId').value=n.id;$('oldImage').value=n.image_url||'';$('title').value=n.title;$('date').value=n.news_date;$('description').value=n.description;$('saveBtn').textContent='Guardar cambios';$('cancelBtn').classList.remove('hidden');scrollTo({top:0,behavior:'smooth'})};
-window.deleteNews=async id=>{if(!confirm('¿Eliminar esta noticia?'))return;const {error}=await db.from('news').delete().eq('id',id);if(error)alert(error.message);else loadList()};
-function esc(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
-db.auth.onAuthStateChange(()=>setTimeout(refreshSession,0));refreshSession();
-</script></body></html>
+  el('login').addEventListener('click',async function(){
+    hideMsg('loginMsg');
+    const email=el('email').value.trim();
+    const password=el('password').value;
+    if(!email||!password){msg('loginMsg','Escribe email y contraseña.','error');return;}
+    this.disabled=true;msg('loginMsg','Conectando con Supabase...');
+    try{
+      const res=await client.auth.signInWithPassword({email:email,password:password});
+      if(res.error)throw res.error;
+      msg('loginMsg','Acceso correcto.','ok');
+      await showSession();
+    }catch(err){
+      msg('loginMsg','ERROR DE SUPABASE: '+(err.message||String(err)),'error');
+    }finally{this.disabled=false;}
+  });
+
+  el('logout').addEventListener('click',async()=>{await client.auth.signOut();await showSession();});
+
+  el('publish').addEventListener('click',async function(){
+    const title=el('title').value.trim(), description=el('description').value.trim(), news_date=el('newsDate').value, file=el('image').files[0];
+    if(!title||!description||!news_date){msg('pubMsg','Completa título, fecha y descripción.','error');return;}
+    this.disabled=true;msg('pubMsg','Publicando...');
+    try{
+      let image_url=null;
+      if(file){
+        const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+        const path=Date.now()+'-'+Math.random().toString(36).slice(2)+'.'+ext;
+        const up=await client.storage.from('news-images').upload(path,file,{upsert:false});
+        if(up.error)throw up.error;
+        image_url=client.storage.from('news-images').getPublicUrl(path).data.publicUrl;
+      }
+      const ins=await client.from('news').insert({title,description,news_date,image_url});
+      if(ins.error)throw ins.error;
+      msg('pubMsg','Noticia publicada correctamente. Ya debe aparecer en la web.','ok');
+      el('title').value='';el('description').value='';el('image').value='';
+    }catch(err){msg('pubMsg','ERROR: '+(err.message||String(err)),'error');}
+    finally{this.disabled=false;}
+  });
+  showSession().catch(e=>msg('loginMsg','ERROR INICIAL: '+e.message,'error'));
+})();
+</script>
+</body></html>
