@@ -87,6 +87,77 @@ document.addEventListener("DOMContentLoaded",function(){
 }
 </style>
 
+
+<style id="android-mobile-navigation-fix">
+/* Android / móvil: mantener navegación rápida visible y deslizable */
+@media (max-width:850px){
+  nav{overflow:visible}
+  .nav{
+    height:auto!important;
+    min-height:58px;
+    padding-top:8px!important;
+    padding-bottom:8px!important;
+    flex-wrap:wrap;
+  }
+  .logo{font-size:19px}
+  .langs{margin-left:auto}
+  .menu{
+    display:flex!important;
+    order:3;
+    width:100%;
+    gap:6px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    white-space:nowrap;
+    padding:7px 0 3px;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .menu::-webkit-scrollbar{display:none}
+  .menu a{
+    display:inline-block;
+    flex:0 0 auto;
+    padding:8px 11px;
+    background:rgba(255,255,255,.07);
+    border-radius:4px;
+    font-size:13px;
+  }
+  .menu a:active{background:var(--a);color:#001b2d}
+
+  /* Portada más compacta en móvil */
+  .hero{
+    min-height:680px!important;
+    height:auto!important;
+    padding-top:118px!important;
+    padding-bottom:28px!important;
+    background-size:contain!important;
+    background-position:center center!important;
+  }
+  .heroText{max-width:72%!important}
+  .hero h1{
+    font-size:clamp(54px,16vw,76px)!important;
+    margin:14px 0!important;
+  }
+  .meta{gap:10px!important;margin:16px 0!important}
+  .meta div{font-size:13px}
+  .count{margin-top:20px!important}
+  .count div{min-width:56px!important;padding:7px 5px!important}
+  .count b{font-size:30px!important}
+}
+@media (max-width:560px){
+  .wrap{padding-left:14px!important;padding-right:14px!important}
+  .hero{
+    min-height:620px!important;
+    padding-top:118px!important;
+  }
+  .heroText{max-width:76%!important}
+  .tag{font-size:12px;padding:4px 8px}
+  .hero h1{font-size:58px!important}
+  .btn{padding:11px 17px;font-size:14px}
+  .count div{min-width:52px!important}
+}
+</style>
+
 </head><body>
 <nav><div class="wrap nav"><a class="logo" href="#home">PSA VALENCIA 2026</a><div class="menu"><a href="#home" data-k="home"></a><a href="#tournament" data-k="tournament"></a><a href="#players" data-k="players"></a><a href="#draw" data-k="draw"></a><a href="#schedule" data-k="schedule"></a><a href="#live" data-k="live"></a><a href="#venue" data-k="venue"></a><a href="#sponsors" data-k="sponsors"></a></div><div class="langs"><button data-l="es">ES</button><button data-l="va">VA</button><button data-l="en">EN</button><button data-l="fr">FR</button></div></div></nav>
 <header id="home" class="hero"><div class="wrap"><div class="heroText"><span class="tag">PSA WORLD TOUR</span><h1>PSA<br><em>VALENCIA</em><br>2026</h1><div class="meta"><div><small data-k="dates"></small><b>11–15 <span data-k="august"></span> 2026</b></div><div><small data-k="event"></small><b>Memorial Chimo Marmaneu</b></div><div><small data-k="venue"></small><b>Olympia Alboraya</b></div></div><a href="#draw" class="btn" data-k="viewDraw"></a><div class="count"><div><b id="dd">--</b><span data-k="days"></span></div><div><b id="hh">--</b><span data-k="hours"></span></div><div><b id="mm">--</b><span>MIN</span></div><div><b id="ss">--</b><span>SEG</span></div></div></div></div></header>
