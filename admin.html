@@ -44,10 +44,21 @@ async function refreshSession(){
  if(session) loadList();
 }
 $('loginBtn').onclick=async()=>{
- $('loginStatus').textContent='Entrando...';
- const {error}=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
- $('loginStatus').textContent=error?error.message:'';
- refreshSession();
+ try{
+   const email=$('email').value.trim();
+   const password=$('password').value;
+   if(!email || !password){ $('loginStatus').textContent='Introduce email y contraseña.'; return; }
+   $('loginStatus').textContent='Entrando...';
+   $('loginBtn').disabled=true;
+   const {data,error}=await db.auth.signInWithPassword({email,password});
+   if(error) throw error;
+   $('loginStatus').textContent='Acceso correcto.';
+   await refreshSession();
+ }catch(e){
+   $('loginStatus').textContent='Error de acceso: '+(e.message||e);
+ }finally{
+   $('loginBtn').disabled=false;
+ }
 };
 $('logoutBtn').onclick=async()=>{await db.auth.signOut();refreshSession();};
 
@@ -81,6 +92,6 @@ async function loadList(){
 }
 window.editNews=n=>{$('editId').value=n.id;$('oldImage').value=n.image_url||'';$('title').value=n.title;$('date').value=n.news_date;$('description').value=n.description;$('saveBtn').textContent='Guardar cambios';$('cancelBtn').classList.remove('hidden');scrollTo({top:0,behavior:'smooth'})};
 window.deleteNews=async id=>{if(!confirm('¿Eliminar esta noticia?'))return;const {error}=await db.from('news').delete().eq('id',id);if(error)alert(error.message);else loadList()};
-function esc(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function esc(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
 db.auth.onAuthStateChange(()=>setTimeout(refreshSession,0));refreshSession();
 </script></body></html>
