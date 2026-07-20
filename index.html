@@ -373,6 +373,11 @@ document.addEventListener("DOMContentLoaded",function(){
   }
 }
 </style>
+
+<style id="youtube-live-player-style">
+.youtube-live-wrap{position:relative;width:100%;max-width:1000px;margin:30px auto 0;aspect-ratio:16/9;background:#000}
+.youtube-live-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+</style>
 </head><body>
 <nav><div class="wrap nav"><a class="logo" href="#home">PSA VALENCIA 2026</a><div class="menu"><a href="#home" data-k="home"></a><a href="#tournament" data-k="tournament"></a><a href="#players" data-k="players"></a><a href="#draw" data-k="draw"></a><a href="#schedule" data-k="schedule"></a><a href="#live" data-k="live"></a><a href="#venue" data-k="venue"></a><a href="#news" data-k="news"></a><a href="#gallery" data-k="gallery"></a><a href="#sponsors" data-k="sponsors"></a></div><div class="langs"><button data-l="es">ES</button><button data-l="va">VA</button><button data-l="en">EN</button><button data-l="fr">FR</button><a href="admin.html" class="admin-link">ADMIN</a></div></div></nav>
 <header id="home" class="hero"><div class="wrap"><div class="heroText"><div class="hero-brand-row"><span class="tag">PSA WORLD TOUR</span><img class="copper-logo" src="assets/COPPER.webp" alt="Copper"></div><h1>PSA<br><em>VALENCIA</em><br>2026</h1><div class="meta"><div><small data-k="dates"></small><b>11–15 <span data-k="august"></span> 2026</b></div><div><small data-k="event"></small><b>Memorial Chimo Marmaneu</b></div><div><small data-k="venue"></small><b>Olympia Alboraya</b></div></div><a href="#draw" class="btn" data-k="viewDraw"></a><div class="count"><div><b id="dd">--</b><span data-k="days"></span></div><div><b id="hh">--</b><span data-k="hours"></span></div><div><b id="mm">--</b><span>MIN</span></div><div><b id="ss">--</b><span>SEG</span></div></div></div></div></header>
@@ -380,7 +385,7 @@ document.addEventListener("DOMContentLoaded",function(){
 <section id="schedule" class="section"><div class="wrap"><span class="eyebrow" data-k="schedule"></span><h2 class="title" data-k="programme"></h2><div class="schedule"><div class="day"><strong>11 AGO</strong><span data-k="r1"></span></div><div class="day"><strong>12 AGO</strong><span data-k="r2"></span></div><div class="day"><strong>13 AGO</strong><span data-k="qf"></span></div><div class="day"><strong>14 AGO</strong><span data-k="sf"></span></div><div class="day"><strong>15 AGO</strong><span data-k="final"></span></div></div></div></section>
 <section id="players" class="section dark2"><div class="wrap"><span class="eyebrow" data-k="players">&nbsp;</span><h2 class="title" data-k="players"></h2><p class="note" data-k="playersNote"></p><div class="api" data-k="apiPending"></div><div class="cards" id="playerCards"></div></div></section>
 <section id="draw" class="section"><div class="wrap"><span class="eyebrow" data-k="draw">&nbsp;</span><h2 class="title" data-k="draw"></h2><p class="note" data-k="drawNote"></p><div class="api" data-k="apiPending"></div><div class="bracketScroll"><div class="bracket" id="bracket"></div></div></div></section>
-<section id="live" class="section dark2"><div class="wrap"><span class="eyebrow" data-k="live">&nbsp;</span><h2 class="title" data-k="live"></h2><p class="copy" data-k="liveText"></p></div></section>
+<section id="live" class="section dark2"><div class="wrap"><span class="eyebrow" data-k="live">&nbsp;</span><h2 class="title" data-k="live"></h2><p class="copy" data-k="liveText"></p><div id="youtubeLiveWrap" class="youtube-live-wrap" style="display:none"><iframe id="youtubeLiveFrame" title="PSA Valencia 2026 en directo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></div></section>
 <section id="venue" class="section"><div class="wrap"><span class="eyebrow" data-k="venue"></span><h2 class="title">Olympia Hotel, Events &amp; Spa</h2><div class="venue"><div class="venueBox"><h3>Olympia Hotel, Events &amp; Spa</h3><p>C/ Maestro Serrano, 3<br>Alboraya, Valencia<br><br>Tel: +34 963 03 33 92</p><a class="btn" href="https://www.google.com/maps/search/?api=1&query=Olympia+Hotel+Events+Spa+C%2F+Maestro+Serrano+3+Alboraya+Valencia" target="_blank" rel="noopener" data-k="openMap"></a></div><div class="map"><iframe title="Olympia Hotel, Events & Spa" loading="lazy" src="https://www.google.com/maps?q=Olympia%20Hotel%20Events%20%26%20Spa%2C%20C%2F%20Maestro%20Serrano%2C%203%2C%20Alboraya%2C%20Valencia&output=embed"></iframe></div></div></div></section>
 <section id="news" class="section"><div class="wrap"><span class="eyebrow" data-k="news"></span><h2 class="title" data-k="latestNews"></h2><div id="newsGrid" class="news-grid"><p class="note" data-k="loadingNews"></p></div></div></section>
 <section id="gallery" class="section dark2"><div class="wrap"><span class="eyebrow" data-k="gallery">&nbsp;</span><h2 class="title" data-k="gallery"></h2><div id="galleryGrid"><p class="note">Cargando galería...</p></div></div></section>
@@ -462,6 +467,27 @@ function applySiteContent(){
   if(sf&&d.sf)sf.textContent=d.sf;
   if(finalEl&&d.final)finalEl.textContent=d.final;
   if(live&&d.live_text)live.textContent=d.live_text;
+  const liveWrap=document.getElementById('youtubeLiveWrap');
+  const liveFrame=document.getElementById('youtubeLiveFrame');
+  if(liveWrap&&liveFrame){
+    const embed=getYoutubeEmbedUrl(d.youtube_url||'');
+    if(embed){liveFrame.src=embed;liveWrap.style.display='block';}
+    else{liveFrame.removeAttribute('src');liveWrap.style.display='none';}
+  }
+}
+
+
+function getYoutubeEmbedUrl(url){
+  if(!url)return '';
+  try{
+    const u=new URL(url);
+    let id='';
+    if(u.hostname.includes('youtu.be')) id=u.pathname.replace('/','').split('/')[0];
+    else if(u.pathname.startsWith('/live/')) id=u.pathname.split('/live/')[1].split('/')[0];
+    else if(u.pathname.startsWith('/shorts/')) id=u.pathname.split('/shorts/')[1].split('/')[0];
+    else id=u.searchParams.get('v')||'';
+    return id ? 'https://www.youtube.com/embed/'+encodeURIComponent(id) : '';
+  }catch(e){return '';}
 }
 
 loadSiteContent();
