@@ -391,7 +391,13 @@ document.addEventListener("DOMContentLoaded",function(){
   .heroText>.btn{top:calc(50% + 360px)!important;}
 }
 </style>
-</head><body>
+<style id="desktop-position-tweak-2">
+@media (min-width:851px){
+.hero .count{left:33vw!important}
+.hero .meta{transform:translateY(195px)!important}
+.heroText>.btn{top:calc(50% + 420px)!important}
+}
+</style></head><body>
 <nav><div class="wrap nav"><a class="logo" href="#home">PSA VALENCIA 2026</a><div class="menu"><a href="#home" data-k="home"></a><a href="#tournament" data-k="tournament"></a><a href="#players" data-k="players"></a><a href="#draw" data-k="draw"></a><a href="#schedule" data-k="schedule"></a><a href="#live" data-k="live"></a><a href="#venue" data-k="venue"></a><a href="#news" data-k="news"></a><a href="#gallery" data-k="gallery"></a><a href="#sponsors" data-k="sponsors"></a></div><div class="langs"><button data-l="es">ES</button><button data-l="va">VA</button><button data-l="en">EN</button><button data-l="fr">FR</button><a href="admin.html" class="admin-link">ADMIN</a></div></div></nav>
 <header id="home" class="hero"><div class="wrap"><div class="heroText"><div class="hero-brand-row"><span class="tag">PSA WORLD TOUR</span><img class="copper-logo" src="assets/COPPER.webp" alt="Copper"></div><h1>PSA<br><em>VALENCIA</em><br>2026</h1><div class="meta"><div><small data-k="dates"></small><b>11–15 <span data-k="august"></span> 2026</b></div><div><small data-k="event"></small><b>Memorial Chimo Marmaneu</b></div><div><small data-k="venue"></small><b>Olympia Alboraya</b></div></div><a href="#draw" class="btn" data-k="viewDraw"></a><div class="count"><div><b id="dd">--</b><span data-k="days"></span></div><div><b id="hh">--</b><span data-k="hours"></span></div><div><b id="mm">--</b><span>MIN</span></div><div><b id="ss">--</b><span>SEG</span></div></div></div></div></header>
 <section id="tournament" class="section dark2"><div class="wrap grid2"><div><span class="eyebrow" data-k="tournament"></span><h2 class="title" data-k="headline"></h2></div><div class="copy" data-html="intro"></div></div></section>
