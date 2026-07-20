@@ -405,4 +405,43 @@ async function loadGallery(){
 }
 loadGallery();
 document.querySelectorAll('.langs button').forEach(b=>b.addEventListener('click',loadGallery));
-</script></body></html>
+</script>
+<script id="site-content-public">
+let siteContentCache=null;
+
+async function loadSiteContent(){
+  const {data,error}=await newsClient.from('site_content').select('*').eq('id',1).maybeSingle();
+  if(error||!data)return;
+  siteContentCache=data;
+  applySiteContent();
+}
+
+function applySiteContent(){
+  if(!siteContentCache)return;
+  const lang=(document.documentElement.lang||'es').slice(0,2);
+  /* El editor actual guarda contenido ES. Se aplica en español;
+     los demás idiomas conservan las traducciones existentes del index. */
+  if(lang!=='es')return;
+  const d=siteContentCache;
+  const headline=document.querySelector('#tournament [data-k="headline"]');
+  const intro=document.querySelector('#tournament [data-html="intro"]');
+  const r1=document.querySelector('#schedule [data-k="r1"]');
+  const r2=document.querySelector('#schedule [data-k="r2"]');
+  const qf=document.querySelector('#schedule [data-k="qf"]');
+  const sf=document.querySelector('#schedule [data-k="sf"]');
+  const finalEl=document.querySelector('#schedule [data-k="final"]');
+  const live=document.querySelector('#live [data-k="liveText"]');
+  if(headline&&d.headline)headline.textContent=d.headline;
+  if(intro&&d.intro)intro.innerHTML=d.intro;
+  if(r1&&d.r1)r1.textContent=d.r1;
+  if(r2&&d.r2)r2.textContent=d.r2;
+  if(qf&&d.qf)qf.textContent=d.qf;
+  if(sf&&d.sf)sf.textContent=d.sf;
+  if(finalEl&&d.final)finalEl.textContent=d.final;
+  if(live&&d.live_text)live.textContent=d.live_text;
+}
+
+loadSiteContent();
+document.querySelectorAll('.langs button').forEach(b=>b.addEventListener('click',()=>setTimeout(applySiteContent,0)));
+</script>
+</body></html>
