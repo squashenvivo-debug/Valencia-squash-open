@@ -312,6 +312,36 @@ document.addEventListener("DOMContentLoaded",function(){
 #home.hero{min-height:0!important;height:auto!important}
 #home .hero-content{min-height:0!important}
 }
+</style><style id="hero-position-final">
+/* Escritorio: contador desplazado hacia el centro-izquierda */
+@media (min-width:701px){
+  #home .countdown{
+    position:absolute!important;
+    left:44%!important;
+    right:auto!important;
+    top:50%!important;
+    transform:translate(-50%,-50%)!important;
+    margin:0!important;
+    z-index:6!important;
+  }
+}
+/* Móvil: subir contenido visual del hero; contador conserva su posición */
+@media (max-width:700px){
+  #home .hero-brand-row{
+    transform:translateY(-62px)!important;
+  }
+  #home .hero-title,
+  #home .hero-title-wrap{
+    transform:translateY(-62px)!important;
+  }
+  #home .meta{
+    bottom:180px!important;
+  }
+  #home .hero-actions,
+  #home .draw-btn{
+    transform:translateY(-62px)!important;
+  }
+}
 </style></head><body>
 <nav><div class="wrap nav"><a class="logo" href="#home">PSA VALENCIA 2026</a><div class="menu"><a href="#home" data-k="home"></a><a href="#tournament" data-k="tournament"></a><a href="#players" data-k="players"></a><a href="#draw" data-k="draw"></a><a href="#schedule" data-k="schedule"></a><a href="#live" data-k="live"></a><a href="#venue" data-k="venue"></a><a href="#news" data-k="news"></a><a href="#gallery" data-k="gallery"></a><a href="#sponsors" data-k="sponsors"></a></div><div class="langs"><button data-l="es">ES</button><button data-l="va">VA</button><button data-l="en">EN</button><button data-l="fr">FR</button><a href="admin.html" class="admin-link">ADMIN</a></div></div></nav>
 <header id="home" class="hero"><div class="wrap"><div class="heroText"><div class="hero-brand-row"><span class="tag">PSA WORLD TOUR</span><img class="copper-logo" src="assets/COPPER.webp" alt="Copper"></div><h1>PSA<br><em>VALENCIA</em><br>2026</h1><div class="meta"><div><small data-k="dates"></small><b>11–15 <span data-k="august"></span> 2026</b></div><div><small data-k="event"></small><b>Memorial Chimo Marmaneu</b></div><div><small data-k="venue"></small><b>Olympia Alboraya</b></div></div><a href="#draw" class="btn" data-k="viewDraw"></a><div class="count"><div><b id="dd">--</b><span data-k="days"></span></div><div><b id="hh">--</b><span data-k="hours"></span></div><div><b id="mm">--</b><span>MIN</span></div><div><b id="ss">--</b><span>SEG</span></div></div></div></div></header>
