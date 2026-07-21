@@ -1,62 +1,63 @@
-/* Solo se aplica mientras designer.js activa body.designer-mode. */
-body.designer-mode .hero [data-designer-target] {
+/* El layout publicado solo afecta al hero cuando Supabase aporta posiciones. */
+body.hero-layout-applied .hero [data-designer-target] {
   position: absolute !important;
   z-index: 2;
   margin: 0 !important;
   transform: none !important;
+}
+
+body.hero-layout-applied .hero > .wrap,
+body.hero-layout-applied .hero .heroText { position: static !important; }
+/* La fila no debe convertirse en el bloque de referencia de sus dos hijos.
+   Sus transforms responsive crearían ese límite incluso con position: static. */
+body.hero-layout-applied .hero .hero-brand-row {
+  position: static !important;
+  transform: none !important;
+}
+
+body.designer-mode .hero [data-designer-target] {
   cursor: grab;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
 }
-
-/* Las coordenadas del editor siempre se miden desde el hero. */
-body.designer-mode .hero > .wrap,
-body.designer-mode .hero .heroText {
-  position: static !important;
-}
-
-body.designer-mode .hero .hero-brand-row {
-  position: relative;
-  z-index: 2;
-}
-
 body.designer-mode .hero [data-designer-target]:hover,
+body.designer-mode .hero [data-designer-target].is-selected,
 body.designer-mode .hero [data-designer-target].is-dragging {
   outline: 2px dashed #f7c52b;
   outline-offset: 7px;
 }
+body.designer-mode .hero [data-designer-target].is-dragging { cursor: grabbing; }
 
-body.designer-mode .hero [data-designer-target].is-dragging {
-  cursor: grabbing;
-}
-
-.designer-toolbar {
+.designer-panel {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
   z-index: 100;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 10px 12px;
-  border-radius: 5px;
+  top: 92px;
+  right: 20px;
+  width: 310px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 8px;
   background: #001b2d;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
-  color: #fff;
-  font: 700 13px 'Barlow Condensed', Arial, sans-serif;
+  box-shadow: 0 12px 35px rgba(0,0,0,.42);
+  color: #eaf4f7;
+  font: 600 14px Barlow, Arial, sans-serif;
 }
+.designer-panel__header { display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#002b49;font:800 19px 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase; }
+.designer-panel__header button { border:0;background:transparent;color:#fff;font-size:26px;line-height:1;cursor:pointer; }
+.designer-panel__body { padding:15px; }
+.designer-panel__hint { margin:0 0 14px;color:#9fb9c9;line-height:1.4;font-size:12px; }
+.designer-profiles { display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px; }
+.designer-elements { display:grid;gap:6px; }
+.designer-panel button { border:1px solid rgba(255,255,255,.15);border-radius:4px;background:#073451;color:#fff;padding:9px 10px;text-align:left;font:700 13px 'Barlow Condensed',Arial,sans-serif;cursor:pointer; }
+.designer-profiles button { text-align:center; }
+.designer-panel button:hover,.designer-panel button.is-active { border-color:#ff7900;background:#174860; }
+.designer-coordinates { display:block;margin-top:14px;padding:10px;background:#000f1a;color:#f7c52b;font:700 14px 'Barlow Condensed',Arial,sans-serif; }
+.designer-status { min-height:17px;margin:10px 0 0;color:#9fb9c9;font-size:12px; }
+.designer-actions { display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:12px; }
+.designer-panel .designer-actions button { text-align:center; }
+.designer-panel .designer-actions .primary { background:#ff7900;color:#001b2d;border-color:#ff7900; }
 
-.designer-toolbar button {
-  border: 0;
-  border-radius: 3px;
-  padding: 7px 10px;
-  background: #ff7900;
-  color: #001b2d;
-  font: inherit;
-  cursor: pointer;
-}
-
-@media (max-width: 600px) {
-  .designer-toolbar { left: 10px; right: 10px; bottom: 10px; justify-content: space-between; }
+@media (max-width: 640px) {
+  .designer-panel { top:auto;right:10px;bottom:10px;left:10px;width:auto;max-height:65vh;overflow-y:auto; }
 }
