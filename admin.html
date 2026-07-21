@@ -90,8 +90,17 @@ h3{margin-top:28px;color:#ffb05c;border-bottom:1px solid #31536a;padding-bottom:
 <h2>Editar contenido de la web</h2>
 <p><small>Edita los textos principales. Los cambios se guardan en Supabase.</small></p>
 <h3>TORNEO</h3>
-<label>Título</label><input id="webHeadline">
-<label>Texto</label><textarea id="webIntro"></textarea>
+<h4>🇪🇸 Español</h4>
+<textarea id="tournament_es" style="min-height:300px"></textarea>
+
+<h4>🇻🇦 Valencià</h4>
+<textarea id="tournament_va" style="min-height:300px"></textarea>
+
+<h4>🇬🇧 English</h4>
+<textarea id="tournament_en" style="min-height:300px"></textarea>
+
+<h4>🇫🇷 Français</h4>
+<textarea id="tournament_fr" style="min-height:300px"></textarea>
 <h3>PROGRAMA DEL TORNEO</h3>
 <label>11 AGO</label><input id="webR1">
 <label>12 AGO</label><input id="webR2">
@@ -219,8 +228,10 @@ h3{margin-top:28px;color:#ffb05c;border-bottom:1px solid #31536a;padding-bottom:
     const res=await client.from('site_content').select('*').eq('id',1).maybeSingle();
     if(res.error){msg('webMsg','Primero hay que crear la tabla site_content en Supabase: '+res.error.message,'error');return;}
     const d=res.data||{};
-    el('webHeadline').value=d.headline||'El squash internacional llega a Alboraya';
-    el('webIntro').value=d.intro||'';
+    el('tournament_es').value=d.tournament_es||'';
+el('tournament_va').value=d.tournament_va||'';
+el('tournament_en').value=d.tournament_en||'';
+el('tournament_fr').value=d.tournament_fr||'';
     el('webR1').value=d.r1||'Primera ronda';
     el('webR2').value=d.r2||'Segunda ronda';
     el('webQf').value=d.qf||'Cuartos de final';
@@ -231,7 +242,25 @@ h3{margin-top:28px;color:#ffb05c;border-bottom:1px solid #31536a;padding-bottom:
   }
   el('saveWeb').addEventListener('click',async function(){
     this.disabled=true;msg('webMsg','Guardando...');
-    const data={id:1,headline:el('webHeadline').value.trim(),intro:el('webIntro').value.trim(),r1:el('webR1').value.trim(),r2:el('webR2').value.trim(),qf:el('webQf').value.trim(),sf:el('webSf').value.trim(),final:el('webFinal').value.trim(),live_text:el('webLive').value.trim(),youtube_url:el('webYoutube').value.trim(),updated_at:new Date().toISOString()};
+   const data={
+  id:1,
+
+  tournament_es:el('tournament_es').value,
+  tournament_va:el('tournament_va').value,
+  tournament_en:el('tournament_en').value,
+  tournament_fr:el('tournament_fr').value,
+
+  r1:el('webR1').value.trim(),
+  r2:el('webR2').value.trim(),
+  qf:el('webQf').value.trim(),
+  sf:el('webSf').value.trim(),
+  final:el('webFinal').value.trim(),
+
+  live_text:el('webLive').value.trim(),
+  youtube_url:el('webYoutube').value.trim(),
+
+  updated_at:new Date().toISOString()
+};
     const res=await client.from('site_content').upsert(data,{onConflict:'id'});
     if(res.error)msg('webMsg','ERROR: '+res.error.message,'error');else msg('webMsg','Contenido guardado correctamente.','ok');
     this.disabled=false;
