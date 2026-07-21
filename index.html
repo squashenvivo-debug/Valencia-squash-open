@@ -1426,7 +1426,8 @@ text-transform:uppercase;
         <aside class="tournament-sidebar">
 
           <div class="sidebar-card">
-            <h3>📅 PROGRAMA DEL TORNEO</h3>
+            <h3 data-k="sidebarProgramme">📅 </h3>
+            
 
             <div class="program-row">
               <span>11 AGO</span>
@@ -1456,7 +1457,7 @@ text-transform:uppercase;
           </div>
 
           <div class="sidebar-card">
-            <h3>📺 EN DIRECTO</h3>
+            <h3 data-k="sidebarLive">📺</h3>
 
             <p data-html="live_text">
               Sigue todos los partidos en directo.
@@ -1470,7 +1471,7 @@ text-transform:uppercase;
 
           <div class="sidebar-card">
 
-            <h3>🏆 PRIZE MONEY</h3>
+            <h3 data-k="sidebarPrize">🏆</h3>
 
             <div class="money">
 
@@ -1486,7 +1487,7 @@ text-transform:uppercase;
 
           <div class="sidebar-card">
 
-            <h3>📍 SEDE</h3>
+            <h3 data-k="sidebarVenue">📍</h3>
 
             <p>
 
@@ -1670,8 +1671,18 @@ text-transform:uppercase;
       if (sf && d.sf) sf.textContent = d.sf;
       if (finalEl && d.final) finalEl.textContent = d.final;
       if (live && d.live_text) live.textContent = d.live_text;
+      const liveButton = document.getElementById('liveButton');
       const liveWrap = document.getElementById('youtubeLiveWrap');
       const liveFrame = document.getElementById('youtubeLiveFrame');
+      if (liveButton) {
+    if (d.youtube_url) {
+        liveButton.href = d.youtube_url;
+        liveButton.style.display = "block";
+    } else {
+        liveButton.removeAttribute("href");
+        liveButton.style.display = "none";
+    }
+}
       if (liveWrap && liveFrame) {
         const embed = getYoutubeEmbedUrl(d.youtube_url || '');
         if (embed) { liveFrame.src = embed; liveWrap.style.display = 'block'; }
