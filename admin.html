@@ -40,6 +40,7 @@ h3{margin-top:28px;color:#ffb05c;border-bottom:1px solid #31536a;padding-bottom:
 <button id="showNews" type="button" class="admin-choice">📰 NOTICIAS</button>
 <button id="showGallery" type="button" class="admin-choice">📷 GALERÍA</button>
 <button id="showWeb" type="button" class="admin-choice">⚙️ EDITAR WEB</button>
+<button id="designerMode" type="button" class="admin-choice">✥ MODO DISEÑADOR</button>
 <button id="logout" type="button" class="logout-btn">CERRAR SESIÓN</button>
 </div>
 </div>
@@ -211,6 +212,7 @@ h3{margin-top:28px;color:#ffb05c;border-bottom:1px solid #31536a;padding-bottom:
   el('showNews').addEventListener('click',()=>selectPanel('news'));
   el('showGallery').addEventListener('click',()=>selectPanel('gallery'));
   el('showWeb').addEventListener('click',()=>selectPanel('web'));
+  el('designerMode').addEventListener('click',()=>{window.location.href='index.html?designer=1';});
 
   async function loadWebContent(){
     hideMsg('webMsg');

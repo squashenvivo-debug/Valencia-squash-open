@@ -1,0 +1,62 @@
+/* Solo se aplica mientras designer.js activa body.designer-mode. */
+body.designer-mode .hero [data-designer-target] {
+  position: absolute !important;
+  z-index: 2;
+  margin: 0 !important;
+  transform: none !important;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Las coordenadas del editor siempre se miden desde el hero. */
+body.designer-mode .hero > .wrap,
+body.designer-mode .hero .heroText {
+  position: static !important;
+}
+
+body.designer-mode .hero .hero-brand-row {
+  position: relative;
+  z-index: 2;
+}
+
+body.designer-mode .hero [data-designer-target]:hover,
+body.designer-mode .hero [data-designer-target].is-dragging {
+  outline: 2px dashed #f7c52b;
+  outline-offset: 7px;
+}
+
+body.designer-mode .hero [data-designer-target].is-dragging {
+  cursor: grabbing;
+}
+
+.designer-toolbar {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 100;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 5px;
+  background: #001b2d;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
+  color: #fff;
+  font: 700 13px 'Barlow Condensed', Arial, sans-serif;
+}
+
+.designer-toolbar button {
+  border: 0;
+  border-radius: 3px;
+  padding: 7px 10px;
+  background: #ff7900;
+  color: #001b2d;
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .designer-toolbar { left: 10px; right: 10px; bottom: 10px; justify-content: space-between; }
+}
